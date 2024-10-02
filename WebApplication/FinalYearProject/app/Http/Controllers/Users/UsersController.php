@@ -134,16 +134,26 @@ class UsersController extends Controller
     
     
     // SearchController.php
-     
-
     public function home(Request $request)
     {
         // Retrieve the logged-in user info
         $userId = $request->session()->get('LoggedUserInfo');
-        $user = User::find($userId); // Fetch user details from the database if needed
+    
+        // Fetch user details from the database
+        $user = User::find($userId);
+        
+        $users = User::take(8)->get(); // or User::limit(8)->get();
+       
+        // Pass user info and LoggedUserInfo to the view
+        return view('home', [
+            'user' => $user, 
+            'users' => $users, 
 
-        return view('home', compact('user')); // Pass user info to the view
+            'LoggedUserInfo' => $user // Pass the entire user object
+        ]);
     }
+    
+
     public function check(Request $request)
     {
         // Validate the incoming request
@@ -226,7 +236,7 @@ class UsersController extends Controller
         
         $LoggedUserInfo = User::find(session('LoggedUserInfo'));
         if (!$LoggedUserInfo) {
-            return redirect()->route('admin.login')->with('fail', 'You must be logged in to access the dashboard');
+            return redirect()->route('user.login')->with('fail', 'You must be logged in to access the dashboard');
         }
     
           return view('user.profile', ['LoggedUserInfo' => $LoggedUserInfo]);
@@ -234,40 +244,52 @@ class UsersController extends Controller
  
     public function updateProfile(Request $request)
     {
-        // Fetch the logged-in user's information
-        $loggedUser = User::find(session('LoggedUserInfo')); // Ensure the session key is correct
-        
+        // Fetch the logged-in user's information using the correct session key
+        $loggedUser = User::find(session('LoggedUserInfo'));
+    
+        // Check if the user is logged in
         if (!$loggedUser) {
             return redirect()->route('user.login')->with('fail', 'You must be logged in to access the profile.');
         }
-        
+    
         // Validate the incoming request data
         $request->validate([
             'name' => 'nullable|string|max:255',
-            'username' => 'nullable|string|max:255',
-            'bio' => 'nullable|string',
-            'picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'phone_number' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',  // Disabled in form, but validate if present
+            'bloodgroup' => 'nullable|string|max:10',
+            'bloodpressure' => 'nullable|string|max:20',
+            'phone' => 'nullable|string|max:20',
+            'country' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',  // Handle profile image upload
         ]);
     
-        // Update the user's profile with the validated data
+        // Update the user's profile with validated data
         $loggedUser->name = $request->input('name');
-        $loggedUser->username = $request->input('username');
-        $loggedUser->bio = $request->input('bio');
-        $loggedUser->phone_number = $request->input('phone_number');
+        $loggedUser->bloodgroup = $request->input('bloodgroup');
+        $loggedUser->bloodpressure = $request->input('bloodpressure');
+        $loggedUser->phone = $request->input('phone');
+        $loggedUser->country = $request->input('country');
+        $loggedUser->city = $request->input('city');
+        $loggedUser->address = $request->input('address');
     
-        // Handle the profile picture upload if a file is provided
-        if ($request->hasFile('picture')) {
-            $pictureFile = $request->file('picture');
-            $picturePath = $pictureFile->store('public/downloads');
-            $loggedUser->picture = str_replace('public/', '', $picturePath);
+        // Handle the profile image upload if a file is provided
+        if ($request->hasFile('image')) {
+            // Store the uploaded image in 'public/profile' folder
+            $imageFile = $request->file('image');
+            $imagePath = $imageFile->store('public/profile');
+            // Store the relative path (without 'public/') in the database
+            $loggedUser->image = str_replace('public/', '', $imagePath);
         }
     
-        // Save the updated profile
+        // Save the updated user profile
         $loggedUser->save();
     
         // Redirect to the user's profile view with a success message
-        return redirect()->route('user.profileview')->with('success', 'Profile updated successfully');
+        return redirect()->back()->with('success', 'Profile updated successfully!');
     }
+    
+
     
 }

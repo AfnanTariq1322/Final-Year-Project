@@ -32,10 +32,19 @@
                         </button>
                         <div class="inflanar-header__button">
                         <div class="inflanar-header__button">
-                            @if(session('LoggedUserInfo'))
-                                <span class="user-name">Welcome, {{ session('LoggedUserName') }}</span>
-                                <a href="{{ route('user.dashboard') }}" class="inflanar-btn inflanar-btn--header">Dashboard</a>
-                             @else
+                        @if(isset($LoggedUserInfo))
+    <span class="user-name">
+        <a href="{{ route('user.dashboard') }}">
+            @if ($user && $user->image)
+                <img src="{{ asset('storage/' . $user->image) }}" alt="Profile Image" class="user-image" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ccc; margin-right: 10px;">
+            @else
+                <img src="{{ asset('path/to/default/image.png') }}" alt="     " class="user-image" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ccc; margin-right: 10px;">
+            @endif
+            Welcome, {{ $user->name }} <!-- Use $user variable instead of session -->
+        </a>
+    </span>
+ 
+@else
                                 <a href="/user/login" class="inflanar-btn1 inflanar-btn__nbg">Login</a>
                                 <a href="/user/register" class="inflanar-btn inflanar-btn--header"><span>Sign Up</span></a>
                             @endif

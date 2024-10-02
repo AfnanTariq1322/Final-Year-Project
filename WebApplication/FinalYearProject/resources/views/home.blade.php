@@ -9,7 +9,7 @@
     <meta name="description" content="#">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Creator Direct advertisement</title>
+    <title>Fundus Disease Analysis - Home</title>
 
     <link rel="icon" href="../img/newicon.png">
 
@@ -55,7 +55,6 @@
         </div>
     </div>
 
-
     <div class="modal offcanvas-modal inflanar-mobile-menu fade" id="offcanvas-modal">
         <div class="modal-dialog offcanvas-dialog">
             <div class="modal-content">
@@ -65,29 +64,66 @@
                     </button>
                 </div>
 
-                <div class="offcanvas-logo">
-                    <a href="https://createrdirect.corammerswork.com/">
-                        <img src="img/CDA-Logo-01__2_-removebg-preview.png" alt="#"></a>
+                <div class="offcanvas-logo"></div>
+
+                <span id="offcanvas-menu" class="offcanvas-menu">
+                    <br>
+                    <span class="nav-menu menu navigation list-none">
+                        @if(session('LoggedUserInfo'))
+                        <span class="user-name">
+                            <a href="{{ route('user.dashboard') }}">
+                                @if ($LoggedUserInfo->image)
+                                <img src="{{ asset('storage/' . $LoggedUserInfo->image) }}" alt="Profile Image"
+                                    class="user-image"
+                                    style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ccc; margin-right: 10px;">
+                                @else
+                                <img src="{{ asset('path/to/default/image.png') }}" alt="Default Image"
+                                    class="user-image"
+                                    style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ccc; margin-right: 10px;">
+                                @endif
+                                Welcome, {{ $user->name }}
+                                <!-- Use the user object for name -->
+                            </a>
+                        </span>
+                        <br>
+                        <nav id="offcanvas-menu" class="offcanvas-menu">
+                            <ul class="nav-menu menu navigation list-none">
+                                <br>
+                                <li class="active"><a href="/home">Home</a></li>
+                                <li><a href="/about">About</a></li>
+                                <li><a href="/blogs">Our Blogs</a></li>
+                                <li><a href="">Diseases</a></li>
+                                <li><a href="">Contact Us</a></li>
+                            </ul>
+                        </nav>
+                        @else
+                        <a href="sign-in.html" class="inflanar-btn1 inflanar-btn__nbg">Login</a>
+                        <a href="register.html" class="inflanar-btn inflanar-btn--header"><span>Sign Up</span></a>
+                        @endif
+                    </span>
+                </span>
+
+                <div class="inflanar-header__button">
+                    @if(session('LoggedUserInfo'))
+                    <span class="user-name">
+                        <a href="{{ route('user.dashboard') }}">
+                            @if ($LoggedUserInfo->image)
+                            <img src="{{ asset('storage/' . $LoggedUserInfo->image) }}" alt="Profile Image"
+                                class="user-image"
+                                style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ccc; margin-right: 10px;">
+                            @else
+                            <img src="{{ asset('path/to/default/image.png') }}" alt="Default Image" class="user-image"
+                                style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ccc; margin-right: 10px;">
+                            @endif
+                            Welcome, {{ $user->name }}
+                            <!-- Use the user object for name -->
+                        </a>
+                    </span>
+                    @else
+                    <a href="sign-in.html" class="inflanar-btn1 inflanar-btn__nbg">Login</a>
+                    <a href="register.html" class="inflanar-btn inflanar-btn--header"><span>Sign Up</span></a>
+                    @endif
                 </div>
-
-
-                <nav id="offcanvas-menu" class="offcanvas-menu">
-
-                    <ul class="nav-menu menu navigation list-none">
-                        <li class=" active"><a href="https://createrdirect.corammerswork.com/">Home</a>
-                        </li>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="our-creator.html">Our Creators</a>
-                            <!-- <ul class="sub-menu">
-                                <li><a href="influencers.html">Creator List</a></li>
-                            </ul> -->
-                        </li>
-                        <li><a href="pricing.html">Pricing</a></li>
-                        <li><a href="contact.html">Contact Us</a></li>
-                    </ul>
-
-                </nav>
-
             </div>
         </div>
     </div>
@@ -118,37 +154,45 @@
                             <div class="inflanar-ptags" data-aos="fade-up" data-aos-delay="500">
                                 <span class="inflanar-ptags__title">Common Conditions</span>
                                 <ul class="inflanar-ptags__list list-none">
-    <li><a href="">Diabetic Retinopathy</a></li>
-    <li><a href="">Age-related Macular Degeneration</a></li>
-    <li><a href="">Retinal Detachment</a></li>
-    <li><a href="">Central Serous Retinopathy</a></li>
-    <li><a href="">Retinitis Pigmentosa</a></li>
-    <li><a href="">Glaucoma</a></li>
-    <li><a href="">Cataract</a></li>
-    <li><a href="">Drusen</a></li>
-    <li><a href="">Macular Degeneration</a></li>
-    <li><a href="">Reticular Drusen</a></li>
-    <li><a href="">Epiretinal Membrane</a></li>
-</ul>
+                                    <li><a href="">Diabetic Retinopathy</a></li>
+                                    <li><a href="">Age-related Macular Degeneration</a></li>
+                                    <li><a href="">Retinal Detachment</a></li>
+                                    <li><a href="">Central Serous Retinopathy</a></li>
+                                    <li><a href="">Retinitis Pigmentosa</a></li>
+                                    <li><a href="">Glaucoma</a></li>
+                                    <li><a href="">Cataract</a></li>
+                                    <li><a href="">Drusen</a></li>
+                                    <li><a href="">Macular Degeneration</a></li>
+                                    <li><a href="">Reticular Drusen</a></li>
+                                    <li><a href="">Epiretinal Membrane</a></li>
+                                </ul>
 
 
                             </div>
 
                             <div class="inflanar-sclient" data-aos="fade-up" data-aos-delay="600">
-                                <ul class="inflanar-sclient__list list-none">
-                                    <li><a href=""><img src="img/in-client1.png" alt="Client 1"></a></li>
-                                    <li><a href=""><img src="img/in-client2.png" alt="Client 2"></a></li>
-                                    <li><a href=""><img src="img/in-client3.png" alt="Client 3"></a></li>
-                                    <li><a href=""><img src="img/in-client4.png" alt="Client 4"></a></li>
-                                    <li><a href=""><img src="img/in-client5.png" alt="Client 5"></a></li>
-                                </ul>
+                            <ul class="inflanar-sclient__list list-none">
+    @foreach ($users as $user)
+        <li>
+            <a href="">
+                @if ($user->image)
+                    <img src="{{ asset('storage/' . $user->image) }}" alt="{{ $user->name }}">
+                @else
+                    <img src="{{ asset('path/to/default/image.png') }}" alt="Default Image">
+                    <!-- Replace 'path/to/default/image.png' with the path to your default image -->
+                @endif
+            </a>
+        </li>
+    @endforeach
+</ul>
+
                                 <h4 class="inflanar-sclient__title"><b class="in-counter">1000</b>+ <span>Patients
                                         Helped</span></h4>
                             </div>
                         </div>
                         <div class="inflanar-hero__img" data-aos="fade-left" data-aos-delay="700">
-                            <img src="img/retina-hero-image.png" alt="Retinal Health" />
-                            <!-- Update with a relevant image for retinal health -->
+                        <img src="../img/homefronticon.jpg" alt="Retinal Health" class="small-image" />
+                        <!-- Update with a relevant image for retinal health -->
                             <div class="inflanar-hero-social inflanar-hero-social--1 inflanar-anim-shape1">
                             </div>
                             <div class="inflanar-hero-social inflanar-hero-social--2 inflanar-anim-shape2">
@@ -277,118 +321,31 @@
     </section>
 
     <section class="footer-cta inflanar-bg-cover section-padding">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="footer-cta__inner inflanar-bg-cover inflanar-section-shape3">
-                    <div class="footer-cta__content">
-                        <h3 class="footer-cta__title color-white">Join Us in Advancing Retinal Fundas Disease Analysis</h3>
-                        <a href="/user/register" class="inflanar-btn inflanar-btn__big inflanar-btn-dark">
-                            <span>Get Started Today!</span>
-                        </a>
-                    </div>
-                    <div class="footer-cta__img">
-                     //   <img src="img/in-footer-cta.png" alt="Retinal Disease Analysis Image">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-
-    <footer class="footer-area p-relative">
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <div class="footer-top-inner pd-top-30 pd-btm-100">
-                        <div class="row">
-                            <div class="col-lg-4 col-md-6 col-12">
+                    <div class="footer-cta__inner inflanar-bg-cover inflanar-section-shape3">
+                        <div class="footer-cta__content">
+                            <h3 class="footer-cta__title color-white">Join Us in Advancing Retinal Fundas Disease
+                                Analysis</h3>
+                            <a href="/user/register" class="inflanar-btn inflanar-btn__big inflanar-btn-dark">
+                                <span>Get Started Today!</span>
+                            </a>
+                        </div>
 
-                                <div class="footer-about-widget">
-                                    <div class="footer-logo inflanar-header__logo">
-                                        <a class="logo" href="https://createrdirect.corammerswork.com/"><img
-                                                src="img/output-onlinepngtools (34).png" alt="#"></a>
-                                    </div>
-                                    <h4 class="footer-about-widget__title">Want to Create Something <span>Great
-                                            Together?</span></h4>
-                                    <div class="footer-get-touch">
-                                        <p>Get in Touch.. <a href="#"><span class="__cf_email__"
-                                                    data-cfemail="4129242d2d2e0130342e2c2e252e282f272e6f222e2c">contact@yourmail.com</span></a>
-                                        </p>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-12">
-
-                                <div class="single-widget footer-useful-links">
-                                    <h3 class="widget-title">Quick Links</h3>
-                                    <ul class="footer__list ">
-                                        <li><a href="https://createrdirect.corammerswork.com/">Home</a></li>
-                                        <li><a href="about.html">About</a></li>
-                                        <li><a href="our-creator.html">Our Creator</a></li>
-                                        <li><a href="pricing.html">Pricing</a></li>
-                                        <li><a href="contact.html">Contact</a></li>
-                                    </ul>
-                                </div>
-
-                            </div>
-                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                <div class="foot-work">
-                                    <div class="single-widget footer-contact">
-                                        <h3 class="widget-title">Working Hour</h3>
-                                        <div class="f-contact__form-top">
-                                            <ul class="f-contact-list list-none">
-                                                <li>Mon - Fri: 7.00am - 6.00pm</li>
-                                                <li>Sat: 7.00am - 6.00pm</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="single-widget footer-contact mg-top-30">
-                                        <h3 class="widget-title">Our Location</h3>
-                                        <div class="f-contact__form-top">
-                                            <p>27 NW New Vexmont, 3 No Tejturi Bazar West, <br> Panthapath North, Dhaka
-                                                1215
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
+                        &nbsp;
+                        <div class="footer-cta__img">
+                              <img src="../img/homefooter.png" width="350px" alt="Retinal Disease Analysis Image">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <div class="copyright">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="copyright__inner">
 
-                            <p class="copyright-text">Copyright @2023 All rights reserved <a
-                                    href="https://corammers.com/" target="_blank">Corammers</a></p>
 
-                            <ul class="inflanar-social inflanar-social__v2">
-                                <li><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fa-brands fa-behance"></i></a></li>
-                                <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
-                                <li><a href="#"><i class="fa-brands fa-linkedin"></i></a></li>
-                                <li><a href="#"><i class="fa-brands fa-facebook-f"></i></a></li>
-                            </ul>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </footer>
+    @include('includes.footer')
 
 
     <a href="#" class="scrollToTop"><img src="img/output-onlinepngtools (32).png"></a>
