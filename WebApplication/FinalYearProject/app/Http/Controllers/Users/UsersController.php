@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Category;
+use App\Models\Blog;
+
 use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
@@ -152,6 +155,43 @@ class UsersController extends Controller
             'LoggedUserInfo' => $user // Pass the entire user object
         ]);
     }
+    public function blogs(Request $request)
+    {
+        // Retrieve the logged-in user info
+        $userId = $request->session()->get('LoggedUserInfo');
+        
+        // Fetch user details from the database
+        $user = User::find($userId);
+        
+        // Fetch categories for the dropdown
+        $categories = Category::all(); // Assuming you have a Category model
+        
+        // Initialize the query for blogs
+        $query = Blog::query();
+        
+        // Filter by selected category
+        if ($request->has('category_id') && $request->category_id != '') {
+            $query->where('category_id', $request->category_id);
+        }
+        
+        // Filter by blog title
+        if ($request->has('blog_title') && $request->blog_title != '') {
+            $query->where('title', 'like', '%' . $request->blog_title . '%');
+        }
+        
+        // Fetch filtered blogs with pagination
+        // Append query parameters to the pagination links
+        $blogs = $query->paginate(9)->appends($request->all()); 
+        
+        // Pass user info, categories, and filtered blogs to the view
+        return view('blogs', [
+            'user' => $user,
+            'categories' => $categories,
+            'blogs' => $blogs,
+            'LoggedUserInfo' => $user
+        ]);
+    }
+    
     
 
     public function check(Request $request)

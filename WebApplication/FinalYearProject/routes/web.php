@@ -20,6 +20,7 @@ Route::get('/', function () {
 });
 
 Route::get('/home', [UsersController::class, 'home'])->name('home');
+Route::get('/blogs', [UsersController::class, 'blogs'])->name('blogs');
 
 
 Route::post('/user/save', [UsersController::class, 'save'])->name('user.save');

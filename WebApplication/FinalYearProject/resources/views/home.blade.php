@@ -2,43 +2,50 @@
 <html class="no-js" lang="ZXX">
 
 <head>
-
+       
     <meta charset="utf-8">
+       
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+       
     <meta name="keywords" content="Site keywords here">
+       
     <meta name="description" content="#">
+       
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Fundus Disease Analysis - Home</title>
+        <title>Fundus Disease Analysis - Home</title>
 
+       
     <link rel="icon" href="../img/newicon.png">
+       
+    <!-- Add Font Awesome for Icons (if not already included) -->
+       
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"        
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="    
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+       
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"        
         rel="stylesheet">
-    <!-- FONTAWESOME -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+       
     <link rel="stylesheet" href="css/bootstrap.min.css">
-
+       
     <link rel="stylesheet" href="css/jquery-ui.min.css">
-
+       
     <link rel="stylesheet" href="css/animate.min.css">
-
+       
     <link rel="stylesheet" href="css/aos.min.css">
-
-    <link rel="stylesheet" href="css/font-awesome-all.min.css">
-
+       
     <link rel="stylesheet" href="css/swiper-slider.min.css">
-
+       
     <link rel="stylesheet" href="css/select2-min.css">
-
+       
     <link rel="stylesheet" href="css/datatables.min.css">
-
+       
     <link rel="stylesheet" href="css/video-popup.min.css">
-
+       
     <link rel="stylesheet" href="css/theme-default.css">
+       
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -171,37 +178,264 @@
                             </div>
 
                             <div class="inflanar-sclient" data-aos="fade-up" data-aos-delay="600">
-                            <ul class="inflanar-sclient__list list-none">
-    @foreach ($users as $user)
-        <li>
-            <a href="">
-                @if ($user->image)
-                    <img src="{{ asset('storage/' . $user->image) }}" alt="{{ $user->name }}">
-                @else
-                    <img src="{{ asset('path/to/default/image.png') }}" alt="Default Image">
-                    <!-- Replace 'path/to/default/image.png' with the path to your default image -->
-                @endif
-            </a>
-        </li>
-    @endforeach
-</ul>
+                                <ul class="inflanar-sclient__list list-none">
+                                    @foreach ($users as $user)
+                                    <li>
+                                        <a href="">
+                                            @if ($user->image)
+                                            <img src="{{ asset('storage/' . $user->image) }}" alt="{{ $user->name }}">
+                                            @else
+                                            <img src="{{ asset('path/to/default/image.png') }}" alt="Default Image">
+                                            <!-- Replace 'path/to/default/image.png' with the path to your default image -->
+                                            @endif
+                                        </a>
+                                    </li>
+                                    @endforeach
+                                </ul>
 
                                 <h4 class="inflanar-sclient__title"><b class="in-counter">1000</b>+ <span>Patients
                                         Helped</span></h4>
                             </div>
                         </div>
                         <div class="inflanar-hero__img" data-aos="fade-left" data-aos-delay="700">
-                        <img src="../img/homefronticon.jpg" alt="Retinal Health" class="small-image" />
-                        <!-- Update with a relevant image for retinal health -->
-                            <div class="inflanar-hero-social inflanar-hero-social--1 inflanar-anim-shape1">
+                                <img src="../img/homefronticon.jpg" alt="Retinal Health" class="small-image" />
+
+                               
+                            <!-- Buttons for Choose Image and Open Camera -->
+                                <div class="image-actions">
+                                <button class="btn choose-image" id="chooseImageBtn">
+                                    <i class="fas fa-file-image"></i> Choose Image
+                                </button>
+                                <input type="file" id="fileInput" accept="image/*" style="display: none;" />
+
+
+                                <!-- Modal for Image Preview -->
+                                <!-- Open Camera Button -->
+                                <button class="btn open-camera" id="openCameraBtn">
+                                    <i class="fas fa-camera-retro"></i> Open Camera
+                                </button>
+                                <video id="cameraStream" autoplay
+                                    style="display: none; width: 100%; height: auto;"></video>
                             </div>
-                            <div class="inflanar-hero-social inflanar-hero-social--2 inflanar-anim-shape2">
+
+                               
+                            <!-- Modal for showing image selection -->
+
+                            <div id="imageModal" class="modal">
+                                <div class="modal-content">
+                                    <span class="close">&times;</span>
+                                    <p id="imageModalText"></p>
+                                    <img id="previewImage" style="max-width: 100%; height: auto;"
+                                        alt="Selected Image" />
+                                    <button class="btn" id="uploadButton" style="display: none;">Upload</button>
+                                </div>
                             </div>
-                            <div class="inflanar-hero-social inflanar-hero-social--3 inflanar-anim-shape3">
-                            </div>
-                            <div class="inflanar-hero-social inflanar-hero-social--4 inflanar-anim-shape4">
-                            </div>
+                               
+                            <!-- Modal for camera preview -->
+                                <div id="cameraModal" class="modal">
+                                        <div class="modal-content">
+                                                <video id="cameraStreamModal" autoplay style="width: 100%;"></video>
+                                                <button class="btn" id="takePictureBtn">Take Picture</button>
+                                                <button class="btn" id="uploadPictureBtn" style="display: none;">Upload
+                                        Picture</button>
+                                            </div>
+                                    </div>
+
+                                <div class="inflanar-hero-social inflanar-hero-social--1 inflanar-anim-shape1"></div>
+                                <div class="inflanar-hero-social inflanar-hero-social--2 inflanar-anim-shape2"></div>
+                                <div class="inflanar-hero-social inflanar-hero-social--3 inflanar-anim-shape3"></div>
+                                <div class="inflanar-hero-social inflanar-hero-social--4 inflanar-anim-shape4"></div>
                         </div>
+
+
+                        <!-- Styles -->
+                        <style>
+                        .inflanar-hero__img {
+                            position: relative;
+                            display: inline-block;
+                            width: 100%;
+                            /* Ensure the image and its container take up full width */
+                        }
+
+                        .small-image {
+                            width: 100%;
+                            height: auto;
+                        }
+
+                        .image-actions {
+                            position: absolute;
+                            top: 90%;
+                            /* Center vertically */
+                            left: 50%;
+                            /* Center horizontally */
+                            transform: translate(-80%, -70%);
+                            /* Adjust the center position */
+                            display: flex;
+                            gap: 10px;
+                            justify-content: center;
+                            padding: 10px 0;
+                            border-radius: 8px;
+                            /* Optional: Round background edges */
+                        }
+
+                        .image-actions .btn {
+                            font-size: 14px;
+                            display: flex;
+                            align-items: center;
+                            padding: 8px 12px;
+                            background-color: black;
+                            color: white;
+                            border: none;
+                            cursor: pointer;
+                            border-radius: 5px;
+                        }
+
+                        .image-actions .btn i {
+                            margin-right: 5px;
+                        }
+
+                        .choose-image:hover,
+                        .open-camera:hover {
+                            background-color: #333;
+                            /* Darker background on hover */
+                        }
+
+                        .modal {
+                            display: none;
+                            position: fixed;
+                            z-index: 1;
+                            padding-top: 100px;
+                            left: 0;
+                            top: 0;
+                            width: 100%;
+                            height: 100%;
+                            overflow: auto;
+                            background-color: rgba(0, 0, 0, 0.4);
+                        }
+
+                        .modal-content {
+                            background-color: #fff;
+                            margin: auto;
+                            padding: 20px;
+                            border: 1px solid #888;
+                            width: 80%;
+                        }
+
+                        .close {
+                            color: #aaa;
+                            float: right;
+                            font-size: 28px;
+                            font-weight: bold;
+                        }
+
+                        .close:hover,
+                        .close:focus {
+                            color: black;
+                            text-decoration: none;
+                            cursor: pointer;
+                        }
+                        </style>
+
+                        <script>
+                        // Handle Choose Image button click
+                        document.getElementById('chooseImageBtn').addEventListener('click', function() {
+                            document.getElementById('fileInput').click();
+                        });
+
+                        // Handle file input change
+                        document.getElementById('fileInput').addEventListener('change', function(event) {
+                            const file = event.target.files[0];
+                            if (file) {
+                                const reader = new FileReader();
+                                reader.onload = function(e) {
+                                    // Show the selected image in the modal
+                                    document.getElementById('previewImage').src = e.target.result;
+                                    showModal('imageModal', 'Image selected: ' + file.name);
+                                    document.getElementById('uploadButton').style.display =
+                                    'block'; // Show the upload button
+                                };
+                                reader.readAsDataURL(file);
+                            }
+                        });
+
+                        // Handle Open Camera button click
+                        document.getElementById('openCameraBtn').addEventListener('click', function() {
+                            openCameraModal();
+                        });
+
+                        // Open camera modal and start stream
+                        function openCameraModal() {
+                            const video = document.getElementById('cameraStreamModal');
+                            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                                navigator.mediaDevices.getUserMedia({
+                                        video: true
+                                    })
+                                    .then(function(stream) {
+                                        video.srcObject = stream;
+                                        showModal('cameraModal');
+                                    })
+                                    .catch(function(error) {
+                                        console.error('Error accessing camera:', error);
+                                    });
+                            } else {
+                                alert('Camera not supported on this device or browser.');
+                            }
+                        }
+
+                        // Handle Take Picture button click
+                        document.getElementById('takePictureBtn').addEventListener('click', function() {
+                            // Simulate taking picture and uploading
+                            const uploadButton = document.getElementById('uploadPictureBtn');
+                            uploadButton.style.display = 'block';
+                            alert('Picture taken!');
+                        });
+
+                        // Handle Upload Picture button click
+                        document.getElementById('uploadPictureBtn').addEventListener('click', function() {
+                            alert('Image uploaded!');
+                            closeModal('cameraModal');
+                        });
+
+                        // Show modal
+                        function showModal(modalId, text = '') {
+                            const modal = document.getElementById(modalId);
+                            if (text) {
+                                document.getElementById('imageModalText').textContent = text;
+                            }
+                            modal.style.display = 'block';
+                        }
+
+                        // Close modal
+                        function closeModal(modalId) {
+                            document.getElementById(modalId).style.display = 'none';
+                        }
+
+                        // Close modal on 'X' click
+                        document.querySelectorAll('.close').forEach(btn => {
+                            btn.onclick = function() {
+                                closeModal(this.parentElement.parentElement.id);
+                            }
+                        });
+
+                        // Close modal if user clicks outside of it
+                        window.onclick = function(event) {
+                            const modals = document.querySelectorAll('.modal');
+                            modals.forEach(modal => {
+                                if (event.target == modal) {
+                                    modal.style.display = 'none';
+                                }
+                            });
+                        };
+
+                        // Handle Upload button click in image modal
+                        document.getElementById('uploadButton').addEventListener('click', function() {
+                            alert('Image uploaded successfully!');
+                            closeModal('imageModal'); // Close the modal after upload
+                        });
+                        </script>
+
+
+
                     </div>
                 </div>
             </div>
@@ -319,33 +553,28 @@
             </div>
         </div>
     </section>
-
     <section class="footer-cta inflanar-bg-cover section-padding">
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <div class="footer-cta__inner inflanar-bg-cover inflanar-section-shape3">
-                        <div class="footer-cta__content">
-                            <h3 class="footer-cta__title color-white">Join Us in Advancing Retinal Fundas Disease
-                                Analysis</h3>
-                            <a href="/user/register" class="inflanar-btn inflanar-btn__big inflanar-btn-dark">
-                                <span>Get Started Today!</span>
-                            </a>
-                        </div>
 
-                        &nbsp;
+                    <div class="footer-cta__inner inflanar-bg-cover  inflanar-section-shape3">
+                        <div class="footer-cta__content">
+                            <h3 class="footer-cta__title color-white">Let influencers do the heavy lifting for your
+                                marketing
+                                campaign</h3>
+                            <a href="register.html"
+                                class="inflanar-btn inflanar-btn__big inflanar-btn-dark"><span>Signup
+                                    Now!</span></a>
+                        </div>
                         <div class="footer-cta__img">
-                              <img src="../img/homefooter.png" width="350px" alt="Retinal Disease Analysis Image">
+                            <img src="../img/homefooter.png" style=" float: right; margin-bottom:5px;max-width:60%;">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-
-
-
-    @include('includes.footer')
+    </section>@include('includes.footer')
 
 
     <a href="#" class="scrollToTop"><img src="img/output-onlinepngtools (32).png"></a>
@@ -374,6 +603,8 @@
     <script src="js/jquery.counterup.min.js"></script>
 
     <script src="js/active.js"></script>
+    <!-- JavaScript to handle file input and camera -->
+
 </body>
 
 </html>
