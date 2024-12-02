@@ -93,8 +93,8 @@
 				</div>
 			</div> -->
             <div class="container-fluid">
-                <div class="form-head mb-sm-5 mb-3 d-flex flex-wrap align-items-center">
-                    <h2 class="font-w600 title mb-2 mr-auto ">Dashboard</h2>
+                <div class="form-head   d-flex flex-wrap align-items-center">
+                    <h2 class="font-w600 title   mr-auto ">Dashboard</h2>
 
                 </div>
                 <div class="row">
@@ -103,24 +103,25 @@
                             <div class="card-body p-4">
                                 <div class="media">
                                     <span class="mr-3">
-                                        <i class="flaticon-381-calendar-1"></i>
+                                        <i class="flaticon-381-calendar-1"></i> <!-- Flaticon calendar icon -->
                                     </span>
                                     <div class="media-body text-white text-right">
-                                    <p class="mb-1">Total Users</p>
-                            <h3 class="text-white">{{ $totalUserCount }}</h3> <!-- Display total user count -->
-                      </div>
+                                        <p class="mb-1">Total Users</p>
+                                        <h3 class="text-white">{{ $totalUserCount }}</h3>
+                                        <!-- Display total user count -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-xl-3 col-sm-6 m-t35">
-                        <!-- Remove the nested column -->
                         <div class="widget-stat card bg-success">
                             <div class="card-body p-4">
                                 <div class="media">
                                     <span class="mr-3">
-                                        <i class="flaticon-381-document-2"></i>
+                                        <!-- Use a valid FontAwesome icon for blogs -->
+                                        <i class="fas fa-file-alt"></i> <!-- FontAwesome document icon -->
                                     </span>
                                     <div class="media-body text-white text-right">
                                         <p class="mb-1">Total Blogs</p>
@@ -131,189 +132,91 @@
                             </div>
                         </div>
                     </div>
- 
-                <div class="col-xl-3 col-sm-6 m-t35">
-
-                </div>
-                <div class="col-xl-3 col-sm-6 m-t35">
-
                 </div>
 
-
-
-
-
-
-
-
-
-                <div class="row">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                </div>
             </div>
-            <div class="row">
 
 
 
-
-
-
-                <div class="row">
-
-
-
-
-                    <div class="col-xl-3 col-xxl-4 col-lg-6 col-sm-6">
-
-                    </div>
-                    <div class="col-xl-3 col-xxl-4 col-lg-6 col-sm-6">
-
-                    </div>
-                    <div class="col-xl-3 col-xxl-4 col-lg-6 col-sm-6">
-
-                    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                </div>
-            </div>
-        </div>
-
-
-
-        <div class="col-xl-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex mb-3 mt-3 justify-content-between align-items-center">
-                        <h4 class="text-black fs-20 mb-0">Recent Users</h4>
-                        <a href="/admin/user" class="btn-link">View more</a>
-                    </div>
-                    <div class="testimonial-one px-4 owl-right-nav owl-carousel owl-loaded owl-drag">
-                        @foreach($recentUsers as $user)
-                        <div class="items">
-                            <div class="text-center">
-                                @if($user['image'])
-                                <img src="{{ asset('storage/' . $user['image']) }}" alt="Profile Picture"
-                                    class="mb-3 rounded" style="width: 100px; height: 100px;">
-                                @else
-                                <img src="{{ asset('path_to_default_image.jpg') }}" alt="Default Picture"
-                                    style="width: 100px; height: 100px;">
-                                @endif
-                                <h5 class="mb-0"><a class="text-black" href="javascript:void(0);">{{ $user->name }}</a>
-                                </h5>
-                                <span class="badge-sm badge-secondary rounded">{{ $user->bloodgroup }}</span>
-                                @if($user->bloodpressure == 'High')
-                                <span class="badge-sm badge-danger rounded">{{ $user->bloodpressure }}</span>
-                                <!-- Red for high -->
-                                @elseif($user->bloodpressure == 'Normal')
-                                <span class="badge-sm badge-warning rounded">{{ $user->bloodpressure }}</span>
-                                <!-- Yellow for normal -->
-                                @elseif($user->bloodpressure == 'Low')
-                                <span class="badge-sm badge-success rounded">{{ $user->bloodpressure }}</span>
-                                <!-- Green for low -->
-                                @else
-                                <span class="badge-sm badge-secondary rounded">Unknown</span>
-                                <!-- Fallback for unknown values -->
-                                @endif
-                            </div>
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex mb-3 mt-3 justify-content-between align-items-center">
+                            <h4 class="text-black fs-20 mb-0">Recent Users</h4>
+                            <a href="/admin/user" class="btn-link">View more</a>
                         </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-        <div class="col-xl-12 ">
-            <div class="card">
-
-                <div class="card-body">
-                    <div class="d-flex mb-3 mt-3 justify-content-between align-items-center">
-                        <h4 class="text-black fs-20 mb-0">Recent Blogs</h4>
-                        <a href="/admin/blog" class="btn-link">View more</a>
-                    </div>
-                    <div class="testimonial-one px-4 owl-right-nav owl-carousel owl-loaded owl-drag">
-                        @foreach($recentBlogs as $blog)
-                        <div class="items">
-                            <div class="text-center">
-                                @if($blog->image_url)
-                                <img src="{{ asset('storage/' . $blog->image_url) }}" alt="Blog Image"
-                                    class="mb-3 rounded" style="width: 100px; height: 100px;">
-                                @else
-                                <img src="{{ asset('path_to_default_image.jpg') }}" alt="Default Image"
-                                    style="width: 100px; height: 100px;">
-                                @endif
-                                <h5 class="mb-0"><a class="text-black"
-                                        href="{{ route('pet.history', $blog->id) }}">{{ $blog->title }}</a></h5>
-                                <span
-                                    class="badge-sm badge-secondary rounded">{{ $blog->created_at->format('M d, Y') }}</span>
+                        <div class="testimonial-one px-4 owl-right-nav owl-carousel owl-loaded owl-drag">
+                            @foreach($recentUsers as $user)
+                            <div class="items">
+                                <div class="text-center">
+                                    @if($user['image'])
+                                    <img src="{{ asset('storage/' . $user['image']) }}" alt="Profile Picture"
+                                        class="mb-3 rounded" style="width: 100px; height: 100px;">
+                                    @else
+                                    <img src="{{ asset('path_to_default_image.jpg') }}" alt="Default Picture"
+                                        style="width: 100px; height: 100px;">
+                                    @endif
+                                    <h5 class="mb-0"><a class="text-black"
+                                            href="javascript:void(0);">{{ $user->name }}</a>
+                                    </h5>
+                                    <span class="badge-sm badge-secondary rounded">{{ $user->bloodgroup }}</span>
+                                    @if($user->bloodpressure == 'High')
+                                    <span class="badge-sm badge-danger rounded">{{ $user->bloodpressure }}</span>
+                                    <!-- Red for high -->
+                                    @elseif($user->bloodpressure == 'Normal')
+                                    <span class="badge-sm badge-warning rounded">{{ $user->bloodpressure }}</span>
+                                    <!-- Yellow for normal -->
+                                    @elseif($user->bloodpressure == 'Low')
+                                    <span class="badge-sm badge-success rounded">{{ $user->bloodpressure }}</span>
+                                    <!-- Green for low -->
+                                    @else
+                                    <span class="badge-sm badge-secondary rounded">Unknown</span>
+                                    <!-- Fallback for unknown values -->
+                                    @endif
+                                </div>
                             </div>
+                            @endforeach
                         </div>
-                        @endforeach
                     </div>
                 </div>
-
-
             </div>
+
+
+
+            <div class="col-xl-12 ">
+                <div class="card">
+
+                    <div class="card-body">
+                        <div class="d-flex mb-3 mt-3 justify-content-between align-items-center">
+                            <h4 class="text-black fs-20 mb-0">Recent Blogs</h4>
+                            <a href="/admin/blog" class="btn-link">View more</a>
+                        </div>
+                        <div class="testimonial-one px-4 owl-right-nav owl-carousel owl-loaded owl-drag">
+                            @foreach($recentBlogs as $blog)
+                            <div class="items">
+                                <div class="text-center">
+                                    @if($blog->image)
+                                    <img src="{{ asset('storage/' . $blog->image) }}" alt="Blog Image"
+                                        class="mb-3 rounded" style="width: 100px; height: 100px;">
+                                    @else
+                                    <img src="{{ asset('path_to_default_image.jpg') }}" alt="Default Image"
+                                        style="width: 100px; height: 100px;">
+                                    @endif
+                                    <h5 class="mb-0"><a class="text-black" href=" ">{{ $blog->title }}</a></h5>
+                                    <span
+                                        class="badge-sm badge-secondary rounded">{{ $blog->created_at->format('M d, Y') }}</span>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
         </div>
-
-
-    </div>
     </div>
     </div>
     </div>

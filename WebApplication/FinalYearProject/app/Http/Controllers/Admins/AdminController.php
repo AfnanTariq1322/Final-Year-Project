@@ -71,36 +71,41 @@ class AdminController extends Controller
     }
 
     public function storeBlog(Request $request)
-    {
-        // Validate the request data
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate image
-        ]);
+{
+    // Validate the request data
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'content' => 'required|string',
+        'category_id' => 'required|exists:categories,id',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate image
+    ]);
 
-        // Handle the image upload
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('blogs', 'public'); // Store in 'storage/app/public/blogs'
-        } else {
-            $imagePath = null; // Default value if no image is provided
-        }
-
-        // Create the blog
-        Blog::create([
-            'title' => $request->input('title'),
-            'content' => $request->input('content'),
-            'category_id' => $request->input('category_id'),
-            'image' => $imagePath, // Save image path
-        ]);
-
-        // Redirect back with success message
-        return redirect()->route('admin.blog')->with('success', 'Blog created successfully!');
+    // Handle the image upload
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('blogs', 'public'); // Store in 'storage/app/public/blogs'
+    } else {
+        $imagePath = null; // Default value if no image is provided
     }
- 
-     
-       
+
+    // Get the logged-in admin's ID
+    $LoggedAdminInfo = Admin::find(session('LoggedAdminInfo')); // Assuming the admin's ID is stored in the session
+    if (!$LoggedAdminInfo) {
+        return redirect()->route('admin.login')->with('fail', 'You must be logged in to access the dashboard');
+    }
+
+    // Create the blog with the admin's ID as the 'created_by'
+    Blog::create([
+        'title' => $request->input('title'),
+        'content' => $request->input('content'),
+        'category_id' => $request->input('category_id'),
+        'image' => $imagePath, // Save image path
+        'created_by' => $LoggedAdminInfo->id, // Set the logged-in admin as the creator
+    ]);
+
+    // Redirect back with success message
+    return redirect()->route('admin.blog')->with('success', 'Blog created successfully!');
+}
+
         public function user(Request $request)
         {
              $LoggedAdminInfo = Admin::find(session('LoggedAdminInfo'));
@@ -115,15 +120,22 @@ class AdminController extends Controller
        
         public function blog(Request $request)
         {
-             $LoggedAdminInfo = Admin::find(session('LoggedAdminInfo'));
+            // Get the logged-in admin info
+            $LoggedAdminInfo = Admin::find(session('LoggedAdminInfo'));
+            
+            // If admin is not logged in, redirect to the login page
             if (!$LoggedAdminInfo) {
                 return redirect()->route('admin.login')->with('fail', 'You must be logged in to access the dashboard');
             }
+        
+            // Fetch all categories
             $categories = Category::all();
-    
-            $blogs = Blog::paginate(5);
-    
-             return view('admin.blog', ['blogs' => $blogs,'categories'=>$categories, 'LoggedAdminInfo' => $LoggedAdminInfo]);
+            
+            // Fetch blogs ordered by the latest created first
+            $blogs = Blog::orderBy('created_at', 'desc')->paginate(5);
+        
+            // Return the view with blogs, categories, and logged admin info
+            return view('admin.blog', ['blogs' => $blogs, 'categories' => $categories, 'LoggedAdminInfo' => $LoggedAdminInfo]);
         }
         
     

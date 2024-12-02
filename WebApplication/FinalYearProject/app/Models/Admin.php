@@ -22,4 +22,9 @@ class Admin extends Model
         'email',
         'password',
     ];
+
+    public function blogs()
+    {
+        return $this->hasMany(Blog::class, 'created_by'); // 'created_by' is the foreign key in blogs table
+    }
 }

@@ -21,9 +21,9 @@
                                             </li>
                                             <li><a href="/about">About</a></li>
 
-                                            <li class="{{ request()->routeIs('blogs') ? 'active' : '' }}">
-                                                <a href="{{ route('blogs') }}" class="menu-blogs">Our Blogs</a>
-                                            </li>
+                                            <li class="{{ request()->routeIs('blogs') || request()->routeIs('blogdetail') ? 'active' : '' }}">
+    <a href="{{ route('blogs') }}" class="menu-blogs">Our Blogs</a>
+</li>
 
 
                                             <li><a href="">Diseases</a></li>

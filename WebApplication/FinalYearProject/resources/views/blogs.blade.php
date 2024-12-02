@@ -2,62 +2,64 @@
 <html class="no-js" lang="ZXX">
 
 <head>
-       
+
     <meta charset="utf-8">
-       
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-       
     <meta name="keywords" content="Site keywords here">
-       
     <meta name="description" content="#">
-       
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <title>Fundus Disease Analysis - Home</title>
+    <title>Fundus Disease Analysis - Dashboard</title>
 
-       
     <link rel="icon" href="../img/newicon.png">
-       
-    <!-- Add Font Awesome for Icons (if not already included) -->
-       
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"        
-        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="    
-            crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-       
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
-
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"        
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
-       
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-       
-    <link rel="stylesheet" href="css/jquery-ui.min.css">
-       
-    <link rel="stylesheet" href="css/animate.min.css">
-       
-    <link rel="stylesheet" href="css/aos.min.css">
-       
-    <link rel="stylesheet" href="css/swiper-slider.min.css">
-       
-    <link rel="stylesheet" href="css/select2-min.css">
-       
-    <link rel="stylesheet" href="css/datatables.min.css">
-       
-    <link rel="stylesheet" href="css/video-popup.min.css">
-       
-    <link rel="stylesheet" href="css/theme-default.css">
-       
-    <link rel="stylesheet" href="style.css">
+    <!-- FONTAWESOME -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="../css/jquery-ui.min.css">
+
+    <link rel="stylesheet" href="../css/animate.min.css">
+
+    <link rel="stylesheet" href="../css/aos.min.css">
+
+    <link rel="stylesheet" href="../css/font-awesome-all.min.css">
+
+    <link rel="stylesheet" href="../css/swiper-slider.min.css">
+
+    <link rel="stylesheet" href="../css/select2-min.css">
+
+    <link rel="stylesheet" href="../css/datatables.min.css">
+
+    <link rel="stylesheet" href="../css/video-popup.min.css">
+
+    <link rel="stylesheet" href="{{ asset('css/theme-default.css') }}">
+    <link rel="stylesheet" href="../style.css">
+    
 </head>
 
 <body>
 
 
-    @include('includes.header')
+@include('includes.header')
 
 
-
+<div id="loading">
+        <div id="loading-center">
+            <div id="loading-center-absolute">
+                <div class="object" id="object_one"></div>
+                <div class="object" id="object_two"></div>
+                <div class="object" id="object_three"></div>
+                <div class="object" id="object_four"></div>
+                <div class="object" id="object_five"></div>
+            </div>
+        </div>
+    </div>
 
     <br><br><br>
 
@@ -79,29 +81,32 @@
             </div>
 
             <div class="row">
-                <form class="d-flex flex-wrap" action="{{ route('blogs') }}" method="GET" style="width: 100%;">
-                    <div class="col-12 col-md-8 mb-3">
-                        <label for="category" class="form-label">Category</label>
-                        <select name="category_id" class="form-select" id="category" aria-label="Select Category">
-                            <option value="">Select Category</option>
-                            <!-- Dynamically populate categories -->
-                            @foreach($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+    <form class="d-flex flex-wrap" action="{{ route('blogs') }}" method="GET" style="width: 100%;">
+        <div class="col-12 col-md-8 mb-3">
+            <label for="category" class="form-label">Category</label>
+            <select name="category_id" class="form-select" id="category" aria-label="Select Category">
+                <option value="">Select Category</option>
+                <!-- Dynamically populate categories -->
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}"
+                        {{ (request('category_id') == $category->id || (isset($blog) && $blog->category_id == $category->id)) ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
 
-                    <div class="col-12 col-md-4 d-flex align-items-end mb-3">
+        <div class="col-12 col-md-4 d-flex align-items-end mb-3">
             <button type="submit" class="btn btn-lg w-50" style="background-color: #604BB0; border: none; color: white;">
                 <i class="fas fa-search"></i> Search
             </button>
             <a href="{{ route('blogs') }}" class="btn btn-lg w-20 ms-2" style="background-color: #dc3545; border: none; color: white;">
-                <i class="fas fa-redo"></i>  
+                <i class="fas fa-redo"></i>
             </a>
         </div>
-                </form>
+    </form>
+</div>
 
-            </div>
         </div>
     </section>
 
@@ -138,6 +143,8 @@
                             <div class="inflanar-service__top1">
                                 @if($blog->category->name == 'Diabetic Retinopathy')
                                 <div class="instagram-butt1">{{ $blog->category->name }}</div>
+                                @elseif($blog->category->name == 'Drusen')
+                                <div class="instagram-butt1">{{ $blog->category->name }}</div>
                                 @elseif($blog->category->name == 'Age-related Macular Degeneration')
                                 <div class="instagram-butt2">{{ $blog->category->name }}</div>
                                 @elseif($blog->category->name == 'Retinal Detachment')
@@ -163,12 +170,16 @@
                                 @endif
                             </div>
                             <h3 class="inflanar-service__title1">
-                                <a href="">{{ $blog->title }}</a>
+                                <a href="{{ route('blogdetail', $blog->id) }}">{{ $blog->title }}</a>
                             </h3>
                             <div class="inflanar-service__author">
                                 <div class="inflanar-service__author--info">
                                     <a href="influencer-profile.html">
-                                        <img src="img/in-author1.png" alt="Author Image"> Author Name
+                                        <!-- Display Admin's Image -->
+                                        <img src="{{ asset('storage/' . ($blog->admin->picture ?? 'path_to_default_image.jpg')) }}"
+                                            alt="Admin Image">
+                                        <!-- Display Admin's Name -->
+                                        {{ $blog->admin->name ?? 'Admin' }}
                                     </a>
                                 </div>
                                 <div class="inflanar-service__author--rating">
@@ -217,36 +228,41 @@
                 </div>
             </div>
         </div>
-    </section>@include('includes.footer')
+    </section>
+
+
+    @include('includes.footer')
 
 
     <a href="#" class="scrollToTop"><img src="img/output-onlinepngtools (32).png"></a>
 
+
+
     <script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-    <script src="js/jquery.min.js"></script>
-    <script src="js/jquery-migrate.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/jquery-migrate.js"></script>
+    <script src="../js/jquery-ui.min.js"></script>
 
-    <script src="js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
 
-    <script src="js/aos.min.js"></script>
+    <script src="../js/aos.min.js"></script>
 
-    <script src="js/ckeditor.min.js"></script>
+    <script src="../js/ckeditor.min.js"></script>
 
-    <script src="js/fullcalendar.min.js"></script>
+    <script src="../js/fullcalendar.min.js"></script>
 
-    <script src="js/select2-js.min.js"></script>
+    <script src="../js/select2-js.min.js"></script>
 
-    <script src="js/video-popup.min.js"></script>
+    <script src="../js/video-popup.min.js"></script>
 
-    <script src="js/swiper-slider.min.js"></script>
+    <script src="../js/swiper-slider.min.js"></script>
 
-    <script src="js/waypoints.min.js"></script>
+    <script src="../js/waypoints.min.js"></script>
 
-    <script src="js/jquery.counterup.min.js"></script>
+    <script src="../js/jquery.counterup.min.js"></script>
 
-    <script src="js/active.js"></script>
-    <!-- JavaScript to handle file input and camera -->
+    <script src="../js/active.js"></script>
+
 
 </body>
 

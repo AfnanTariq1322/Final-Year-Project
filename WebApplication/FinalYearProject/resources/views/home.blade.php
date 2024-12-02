@@ -198,7 +198,7 @@
                             </div>
                         </div>
                         <div class="inflanar-hero__img" data-aos="fade-left" data-aos-delay="700">
-                                <img src="../img/homefronticon.jpg" alt="Retinal Health" class="small-image" />
+                                <img src="../img/home.png" alt="Retinal Health" class="small-image" />
 
                                
                             <!-- Buttons for Choose Image and Open Camera -->

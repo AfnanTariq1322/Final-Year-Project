@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Users\UsersController;
 use App\Http\Controllers\Admins\AdminController;
+use App\Http\Controllers\Blogs\BlogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,9 @@ Route::get('/', function () {
 
 Route::get('/home', [UsersController::class, 'home'])->name('home');
 Route::get('/blogs', [UsersController::class, 'blogs'])->name('blogs');
+ Route::get('/blog/{id}', [UsersController::class, 'showBlog'])->name('blogdetail');
+ Route::get('/blogs/{id}', [UsersController::class, 'filterBlogsByCategory'])->name('blogs.filter');
+ Route::post('/blogs/{blog}/comments', [BlogController::class, 'storeComment'])->name('comments.store');
 
 
 Route::post('/user/save', [UsersController::class, 'save'])->name('user.save');

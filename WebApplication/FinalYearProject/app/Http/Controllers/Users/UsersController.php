@@ -12,11 +12,82 @@ use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 { 
+    public function filterBlogsByCategory(Request $request, $category_id)
+    {
+        // Retrieve categories for the dropdown
+        $categories = Category::all();
     
-  
+        // Find the category by ID
+        $category = Category::find($category_id);
+    
+        // Initialize the query for blogs
+        $query = Blog::query();
+    
+        // If category exists, apply category filter
+        if ($category) {
+            $query->where('category_id', $category->id);
+        }
+    
+        // If a blog title is provided, filter by blog title
+        if ($request->has('blog_title') && $request->blog_title != '') {
+            $query->where('title', 'like', '%' . $request->blog_title . '%');
+        }
+    
+        // Fetch filtered blogs with pagination
+        $blogs = $query->paginate(9)->appends($request->all());
+    
+        // Pass the category, filtered blogs, and categories to the view
+        return view('blogs', compact('blogs', 'categories'));
+    }
+    public function showBlog($id, Request $request)
+    {
+        // Get the blog by ID and eager load its comments
+        $blog = Blog::with('comments.user')->findOrFail($id); // Ensure you load comments and user relationships
+        $blog->increment('views'); // This will increment the 'views' column by 1
+    
+        // Fetch all categories
+        $categories = Category::all();
+    
+        // Retrieve the logged-in user's information
+        $userId = $request->session()->get('LoggedUserInfo');
+        $user = User::find($userId);
+        
+        // Get the top 4 most popular blogs (most comments and views)
+        $popularBlogs = Blog::withCount('comments') // Count the number of comments for each blog
+                            ->orderByDesc('views') // Order by views
+                            ->orderByDesc('comments_count') // Then order by the number of comments
+                            ->take(4) // Take the top 4
+                            ->get();
+    
+        // Return the blog, categories, popular blogs, and logged user information to the view
+        return view('blogdetail', [
+            'blog' => $blog,
+            'categories' => $categories,
+            'LoggedUserInfo' => $user,
+            'user' => $user,
+            'popularBlogs' => $popularBlogs // Pass the popular blogs to the view
+        ]);
+    }
+    
 
+public function home(Request $request)
+{
+    // Retrieve the logged-in user info
+    $userId = $request->session()->get('LoggedUserInfo');
+
+    // Fetch user details from the database
+    $user = User::find($userId);
     
-    
+    $users = User::take(8)->get(); // or User::limit(8)->get();
+   
+    // Pass user info and LoggedUserInfo to the view
+    return view('home', [
+        'user' => $user, 
+        'users' => $users, 
+
+        'LoggedUserInfo' => $user // Pass the entire user object
+    ]);
+}
     public function login() {
         return view("user.login");
     }
@@ -134,63 +205,44 @@ class UsersController extends Controller
 
     
  
-    
-    
     // SearchController.php
-    public function home(Request $request)
-    {
-        // Retrieve the logged-in user info
-        $userId = $request->session()->get('LoggedUserInfo');
-    
-        // Fetch user details from the database
-        $user = User::find($userId);
-        
-        $users = User::take(8)->get(); // or User::limit(8)->get();
-       
-        // Pass user info and LoggedUserInfo to the view
-        return view('home', [
-            'user' => $user, 
-            'users' => $users, 
 
-            'LoggedUserInfo' => $user // Pass the entire user object
-        ]);
+public function blogs(Request $request)
+{
+    // Retrieve the logged-in user info
+    $userId = $request->session()->get('LoggedUserInfo');
+    
+    // Fetch user details from the database
+    $user = User::find($userId);
+    
+    // Fetch categories for the dropdown
+    $categories = Category::all(); // Assuming you have a Category model
+    
+    // Initialize the query for blogs
+    $query = Blog::query();
+    
+    // Filter by selected category
+    if ($request->has('category_id') && $request->category_id != '') {
+        $query->where('category_id', $request->category_id);
     }
-    public function blogs(Request $request)
-    {
-        // Retrieve the logged-in user info
-        $userId = $request->session()->get('LoggedUserInfo');
-        
-        // Fetch user details from the database
-        $user = User::find($userId);
-        
-        // Fetch categories for the dropdown
-        $categories = Category::all(); // Assuming you have a Category model
-        
-        // Initialize the query for blogs
-        $query = Blog::query();
-        
-        // Filter by selected category
-        if ($request->has('category_id') && $request->category_id != '') {
-            $query->where('category_id', $request->category_id);
-        }
-        
-        // Filter by blog title
-        if ($request->has('blog_title') && $request->blog_title != '') {
-            $query->where('title', 'like', '%' . $request->blog_title . '%');
-        }
-        
-        // Fetch filtered blogs with pagination
-        // Append query parameters to the pagination links
-        $blogs = $query->paginate(9)->appends($request->all()); 
-        
-        // Pass user info, categories, and filtered blogs to the view
-        return view('blogs', [
-            'user' => $user,
-            'categories' => $categories,
-            'blogs' => $blogs,
-            'LoggedUserInfo' => $user
-        ]);
+    
+    // Filter by blog title
+    if ($request->has('blog_title') && $request->blog_title != '') {
+        $query->where('title', 'like', '%' . $request->blog_title . '%');
     }
+    
+    // Order blogs by 'created_at' in descending order to get the latest blog first
+    $blogs = $query->orderBy('created_at', 'desc')->paginate(9)->appends($request->all()); 
+    
+    // Pass user info, categories, and filtered blogs to the view
+    return view('blogs', [
+        'user' => $user,
+        'categories' => $categories,
+        'blogs' => $blogs,
+        'LoggedUserInfo' => $user
+    ]);
+}
+
     
     
 

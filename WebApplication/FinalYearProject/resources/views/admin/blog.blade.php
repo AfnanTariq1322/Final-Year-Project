@@ -26,6 +26,7 @@
     <link href="../AdminTemplate/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
     <link href="../AdminTemplate/vendor/owl-carousel/owl.carousel.css" rel="stylesheet">
     <link href="../AdminTemplate/css/style.css" rel="stylesheet">
+    <script src="https://cdn.ckeditor.com/4.18.0/standard/ckeditor.js"></script>
 
 </head>
 
@@ -123,96 +124,125 @@
                         });
                     });
                     </script>
-                     
-                    
+
+
                     @endif
 
 
                     <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog"
-    aria-labelledby="addProductModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addProductModalLabel">Add Blog</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="addBlogForm" action="{{ route('admin.blogs.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="form-group">
-                        <label for="blogTitle">Title:</label>
-                        <input type="text" class="form-control" id="blogTitle" name="title" required>
+                        aria-labelledby="addProductModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addProductModalLabel">Add Blog</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="addBlogForm" action="{{ route('admin.blogs.store') }}" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="blogTitle">Title:</label>
+                                            <input type="text" class="form-control" id="blogTitle" name="title"
+                                                required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="blogContent">Content:</label>
+                                            <textarea class="form-control" id="blogContent" name="content"
+                                                required></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="category">Category:</label>
+                                            <select class="form-control" id="category" name="category_id" required>
+                                                <option value="">Select Category</option>
+                                                @foreach($categories as $category)
+                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="image">Image:</label>
+                                            <input type="file" class="form-control-file" id="imageInput" name="image"
+                                                required>
+                                            <span id="imageError" class="text-danger"></span>
+                                            <img id="imagePreview" src="#" alt="Image Preview"
+                                                style="display: none; max-width: 100%; margin-top: 10px;">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary" id="addBlogBtn">Add
+                                                Blog</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="blogContent">Content:</label>
-                        <textarea class="form-control" id="blogContent" name="content" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="category">Category:</label>
-                        <select class="form-control" id="category" name="category_id" required>
-                            <option value="">Select Category</option>
-                            @foreach($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="image">Image:</label>
-                        <input type="file" class="form-control-file" id="imageInput" name="image" required>
-                        <span id="imageError" class="text-danger"></span>
-                        <img id="imagePreview" src="#" alt="Image Preview" style="display: none; max-width: 100%; margin-top: 10px;">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" id="addBlogBtn">Add Blog</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
-<script>
-    // Image preview and validation
-    document.getElementById('imageInput').addEventListener('change', function(event) {
-        var file = event.target.files[0];
-        var imagePreview = document.getElementById('imagePreview');
-        var imageError = document.getElementById('imageError');
+                    <script>
+                    // Image preview and validation
+                    document.getElementById('imageInput').addEventListener('change', function(event) {
+                        var file = event.target.files[0];
+                        var imagePreview = document.getElementById('imagePreview');
+                        var imageError = document.getElementById('imageError');
 
-        var validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
-        if (!validImageTypes.includes(file.type)) {
-            imageError.textContent = 'Please select a valid image file (JPEG, PNG, GIF)';
-            imagePreview.style.display = 'none';
-            return;
-        } else {
-            imageError.textContent = '';
-        }
+                        var validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                        if (!validImageTypes.includes(file.type)) {
+                            imageError.textContent = 'Please select a valid image file (JPEG, PNG, GIF)';
+                            imagePreview.style.display = 'none';
+                            return;
+                        } else {
+                            imageError.textContent = '';
+                        }
 
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            imagePreview.src = e.target.result;
-            imagePreview.style.display = 'block';
-        };
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            imagePreview.src = e.target.result;
+                            imagePreview.style.display = 'block';
+                        };
 
-        reader.readAsDataURL(file);
-    });
+                        reader.readAsDataURL(file);
+                    });
 
-    // Initialize CKEditor with basic formatting options and lists
-    CKEDITOR.replace('blogContent', {
-        height: 300,
-        toolbar: [
-            { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat'] },
-            { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote'] },
-            { name: 'links', items: ['Link', 'Unlink'] },
-            { name: 'insert', items: ['Image', 'Table', 'HorizontalRule', 'SpecialChar'] },
-            { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
-            { name: 'colors', items: ['TextColor', 'BGColor'] },
-            { name: 'tools', items: ['Maximize'] }
-        ]
-    });
-</script>
+                    // Initialize CKEditor with basic formatting options and lists
+                    CKEDITOR.replace('blogContent', {
+                        height: 300,
+                        toolbar: [{
+                                name: 'basicstyles',
+                                items: ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat']
+                            },
+                            {
+                                name: 'paragraph',
+                                items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-',
+                                    'Blockquote'
+                                ]
+                            },
+                            {
+                                name: 'links',
+                                items: ['Link', 'Unlink']
+                            },
+                            {
+                                name: 'insert',
+                                items: ['Image', 'Table', 'HorizontalRule', 'SpecialChar']
+                            },
+                            {
+                                name: 'styles',
+                                items: ['Styles', 'Format', 'Font', 'FontSize']
+                            },
+                            {
+                                name: 'colors',
+                                items: ['TextColor', 'BGColor']
+                            },
+                            {
+                                name: 'tools',
+                                items: ['Maximize']
+                            }
+                        ]
+                    });
+                    </script>
 
                     <div class="col-lg-12">
                         <div class="card-header">
@@ -301,57 +331,7 @@
 
 
                                         <!-- Update Modal -->
-                                        <div class="modal fade" id="updateModal{{ $blog->id }}" tabindex="-1"
-                                            role="dialog" aria-labelledby="updateModalLabel{{ $blog->id }}"
-                                            aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <form action="{{ route('admin.blog.update', $blog->id) }}"
-                                                        method="POST" enctype="multipart/form-data">
-                                                        @csrf
-                                                        @method('PUT')
 
-                                                        <div class="form-group">
-                                                            <label for="title">Title:</label>
-                                                            <input type="text" class="form-control" id="title"
-                                                                name="title" value="{{ $blog->title }}" required>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="content">Content:</label>
-                                                            <textarea class="form-control" id="content" name="content"
-                                                                required>{{ $blog->content }}</textarea>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="category">Category:</label>
-                                                            <select class="form-control" id="category"
-                                                                name="category_id" required>
-                                                                @foreach($categories as $category)
-                                                                <option value="{{ $category->id }}"
-                                                                    {{ $blog->category_id == $category->id ? 'selected' : '' }}>
-                                                                    {{ $category->name }}
-                                                                </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="image">Image (optional):</label>
-                                                            <input type="file" class="form-control-file" id="image"
-                                                                name="image">
-                                                            <img src="{{ asset('storage/' . $blog->image) }}"
-                                                                alt="Current Image"
-                                                                style="max-width: 100%; margin-top: 10px;">
-                                                        </div>
-
-                                                        <button type="submit" class="btn btn-primary">Update
-                                                            Blog</button>
-                                                    </form>
-
-                                                </div>
-                                            </div>
-                                        </div>
 
                                         @endforeach
                                     </tbody>
@@ -432,8 +412,51 @@
         ***********************************-->
 
 
+                    @foreach($blogs as $blog)
 
 
+                    <div class="modal mt-2 mb-3 fade" id="updateModal{{ $blog->id }}" tabindex="-1" role="dialog"
+        aria-labelledby="updateModalLabel{{ $blog->id }}" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <form action="{{ route('admin.blog.update', $blog->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="form-group">
+                        <label for="title">Title:</label>
+                        <input type="text" class="form-control" id="title" name="title" value="{{ $blog->title }}" required>
+                    </div>
+                    <div class="form-group">
+    <label for="content">Content:</label>
+    <textarea class="form-control" id="content" value=" {!! $blog->content !!}" name="content" rows="10" required>{!! $blog->content !!}</textarea>
+</div>
+
+
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+                        <select class="form-control" id="category" name="category_id" required>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}"
+                                    {{ $blog->category_id == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Image (optional):</label>
+                        <input type="file" class="form-control-file" id="image" name="image">
+                        <img src="{{ asset('storage/' . $blog->image) }}" alt="Current Image" style="max-width: 100%; margin-top: 10px;">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Update Blog</button>
+                </form>
+            </div>
+        </div>
+    </div>
+                    @endforeach
 
                     <!--**********************************
            Support ticket button start

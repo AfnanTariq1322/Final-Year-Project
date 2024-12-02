@@ -16,3 +16,15 @@
                 </div>
             </div>
         </div>
+
+
+        <style>
+
+:root {
+    --primary:#604BB0 !important;;
+   
+color:white;
+	}	 
+    
+    
+    .btn-link {  color: #604BB0 !important;; }</style>

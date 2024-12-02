@@ -205,32 +205,7 @@
     </header>
 
 
-    <section class="inflanar-breadcrumb">
-        <div class="container">
-            <div class="row">
-
-                <div class="col-12">
-                    <div class="inflanar-breadcrumb__inner">
-                        <div class="inflanar-breadcrumb__content">
-                            <h2 class="inflanar-breadcrumb__title m-0">User Dashboard</h2>
-                            <ul class="inflanar-breadcrumb__menu list-none">
-                                <li><a href="https://createrdirect.corammerswork.com/">Home</a></li>
-                                <li class="active"><a href="dashboard.html">User Dashboard</a></li>
-                            </ul>
-                        </div>
-                        <div class="inflanar-breadcrumb__img">
-                            <div class="inflanar-breadcrumb__thumb">
-                                <img src="img/in-bread-thumb.png">
-                            </div>
-                            <div class="inflanar-breadcrumb__group">
-                                <img src="img/in-social-group.png">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    
     <div class="inflanar-preview__modal modal fade" id="logout_modal" tabindex="-1" aria-labelledby="logoutmodal"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered inflanar-preview__logout">
@@ -578,11 +553,10 @@
                             <h3 class="footer-cta__title color-white">Let influencers do the heavy lifting for your
                                 marketing
                                 campaign</h3>
-                            <a href="contact.html" class="inflanar-btn inflanar-btn__big inflanar-btn-dark"><span>Signup
-                                    Now!</span></a>
+                            
                         </div>
                         <div class="footer-cta__img">
-                            <img src="img/in-footer-cta.png">
+                            <img src="../img/homefooter.png" style=" float: right; margin-bottom:5px;max-width:60%;">
                         </div>
                     </div>
                 </div>
@@ -590,13 +564,11 @@
         </div>
     </section>
 
-
     @include('user.includes.footer')
 
 
 
-    <a href="#" class="scrollToTop"><img src="img/output-onlinepngtools (32).png"></a>
-
+ 
 
     <script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     <script src="../js/jquery.min.js"></script>
