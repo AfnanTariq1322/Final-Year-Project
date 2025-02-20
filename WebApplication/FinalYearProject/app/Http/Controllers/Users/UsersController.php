@@ -7,10 +7,13 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Category;
 use App\Models\Blog;
-
-use Illuminate\Support\Facades\Hash;
-
-class UsersController extends Controller
+ use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+ use Carbon\Carbon;
+ use Illuminate\Support\Facades\Log;
+ use Illuminate\Support\Facades\Password;
+  use Illuminate\Support\Str;
+ class UsersController extends Controller
 { 
     public function filterBlogsByCategory(Request $request, $category_id)
     {
@@ -246,45 +249,45 @@ public function blogs(Request $request)
     
     
 
-    public function check(Request $request)
-    {
-        // Validate the incoming request
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:5|max:12'
-        ]);
-    
-        // Check if the user exists
-        $userInfo = User::where('email', $request->email)->first();
-    
-        if (!$userInfo) {
-            return back()->withInput()->withErrors(['email' => 'Email not found']);
-        }
-        
-        // Check if the user's account is inactive
-        if ($userInfo->status === 'inactive') {
-            return back()->withInput()->withErrors(['status' => 'Your account is inactive']);
-        }
-    
-        // Verify the user's password
-        if (!Hash::check($request->password, $userInfo->password)) {
-            return back()->withInput()->withErrors(['password' => 'Incorrect password']);
-        }
-    
-        // If everything is fine, set the session variables
-        session([
-            'LoggedUserInfo' => $userInfo->id,
-            'LoggedUserName' => $userInfo->name,
-        ]);
-    
-        // Check if the user is already logged in
-        if (session('LoggedUserInfo')) {
-            return redirect()->route('user.dashboard'); // Redirect to dashboard if already logged in
-        }
-    
-        return redirect()->route('home');
+public function check(Request $request)
+{
+    // Validate request
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|min:5|max:12'
+    ]);
+
+    // Find user by email
+    $userInfo = User::where('email', $request->email)->first();
+
+    if (!$userInfo) {
+        return response()->json(['success' => false, 'error' => 'Email not found.']);
     }
-    
+ 
+
+    // ✅ Check if the email is verified
+    if (!$userInfo->is_verified) {
+        return response()->json([
+            'success' => false,
+            'otp_required' => true,  // Indicates OTP verification is needed
+            'email' => $request->email
+        ]);
+    }
+
+    // Verify password
+    if (!Hash::check($request->password, $userInfo->password)) {
+        return response()->json(['success' => false, 'error' => 'Incorrect password.']);
+    }
+
+    // Set session variables
+    session([
+        'LoggedUserInfo' => $userInfo->id,
+        'LoggedUserName' => $userInfo->name,
+    ]);
+
+    return response()->json(['success' => true, 'redirect' => route('user.dashboard')]);
+}
+
 
     
 
@@ -297,31 +300,268 @@ public function blogs(Request $request)
 
          return redirect()->route('home');
     }
-    
- 
+    private function sendResetEmailViaBrevo($email, $name, $resetLink)
+{
+    $apiKey = "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";
+
+    $data = [
+        "sender" => [
+            "name" => "Fundus Image Analysis",
+            "email" => "afnantariq715@gmail.com" // Must be a verified sender in Brevo
+        ],
+        "to" => [
+            [
+                "name" => $name,
+                "email" => $email
+            ]
+        ],
+        "subject" => "Reset Your Password",
+        "htmlContent" => "<html><body><h1>Password Reset</h1>
+                          <p>Click the link below to reset your password:</p>
+                          <p><a href='{$resetLink}'>Reset Password</a></p>
+                          <p>If you didn't request a password reset, ignore this email.</p>
+                          </body></html>"
+    ];
+
+    $jsonData = json_encode($data);
+
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        Log::error("JSON Encode Error: " . json_last_error_msg());
+        return;
+    }
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "https://api.brevo.com/v3/smtp/email");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        "accept: application/json",
+        "api-key: $apiKey",
+        "content-type: application/json"
+    ]);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+
+    $response = curl_exec($ch);
+    $curlError = curl_error($ch);
+    curl_close($ch);
+
+    if ($curlError) {
+        Log::error("cURL Error: " . $curlError);
+    } else {
+        Log::info("Brevo Email Response: " . $response);
+    }
+}
+
+    private function sendEmailViaBrevo($email, $name, $otp)
+{
+$apiKey = "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";
+
+    $data = [
+        "sender" => [
+            "name" => "Fundus Image Analysis",
+            "email" => "afnantariq715@gmail.com" // Must be a verified sender in Brevo
+        ],
+        "to" => [
+            [
+                "name" => $name,
+                "email" => $email
+            ]
+        ],
+        "subject" => "Verify Your Email",
+        "htmlContent" => "<html><body><h1>Email Verification</h1><p>Your OTP is: <strong>{$otp}</strong></p><p>It is valid for 10 minutes.</p></body></html>"
+    ];
+
+    $jsonData = json_encode($data);
+
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        Log::error("JSON Encode Error: " . json_last_error_msg());
+        return;
+    }
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "https://api.brevo.com/v3/smtp/email");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        "accept: application/json",
+        "api-key: $apiKey",
+        "content-type: application/json"
+    ]);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+
+    $response = curl_exec($ch);
+    $curlError = curl_error($ch);
+    curl_close($ch);
+
+    if ($curlError) {
+        Log::error("cURL Error: " . $curlError);
+    } else {
+        Log::info("Brevo Email Response: " . $response);
+    }
+}
+
     public function save(Request $request)
+{
+    // Validate user input
+    $validator = \Validator::make($request->all(), [
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8|regex:/^\S*$/',
+        'confirm_password' => 'required|string|same:password',
+    ], [
+        'email.unique' => 'This email is already registered.',
+        'password.min' => 'Password must be at least 8 characters long.',
+        'confirm_password.same' => 'The confirm password must match the password.',
+    ]);
+
+    // If validation fails, return JSON errors
+    if ($validator->fails()) {
+        Log::error('Validation Failed: ' . json_encode($validator->errors()->toArray()));
+        return response()->json([
+            'success' => false,
+            'errors' => $validator->errors()
+        ], 422);
+    }
+
+    // Generate OTP
+    $otp = rand(100000, 999999);
+    $otpExpiresAt = now()->addMinutes(10);
+
+    // Create user record
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'otp_code' => $otp,
+        'otp_expires_at' => $otpExpiresAt,
+        'is_verified' => false,
+    ]);
+
+    // Send OTP via Brevo API
+    $this->sendEmailViaBrevo($request->email, $request->name, $otp);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Registration successful. Please verify your OTP.'
+    ]);
+}
+
+/**
+ * Send email via Brevo API
+ */
+public function verifyOtp(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email|exists:users,email',
+        'otp_code' => 'required|numeric|digits:6',
+    ]);
+
+    $user = User::where('email', $request->email)->first();
+
+    if (!$user) {
+        return response()->json(['success' => false, 'error' => 'User not found.'], 404);
+    }
+
+    if (Carbon::now()->greaterThan($user->otp_expires_at)) {
+        return response()->json(['success' => false, 'error' => 'OTP has expired.'], 400);
+    }
+
+    if (!hash_equals((string) $user->otp_code, (string) $request->otp_code)) {
+        return response()->json(['success' => false, 'error' => 'Invalid OTP.'], 400);
+    }
+
+    $user->update([
+        'is_verified' => true,
+        'otp_code' => null,
+        'otp_expires_at' => null,
+    ]);
+
+    return response()->json(['success' => true, 'message' => 'Email verified successfully!']);
+}public function resendOtp(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email|exists:users,email',
+    ]);
+
+    $user = User::where('email', $request->email)->first();
+
+    if (!$user) {
+        return response()->json(['success' => false, 'error' => 'User not found.'], 404);
+    }
+
+    $otp = rand(100000, 999999);
+    $user->update([
+        'otp_code' => $otp,
+        'otp_expires_at' => now()->addMinutes(10),
+    ]);
+
+    $this->sendEmailViaBrevo($request->email, $user->name, $otp);
+
+    return response()->json(['success' => true, 'message' => 'New OTP sent successfully!']);
+}
+public function sendResetLink(Request $request)
+{
+    $request->validate(['email' => 'required|email|exists:users,email']);
+
+    // Generate a unique reset token
+    $token = Str::random(64);
+
+    // Store token in the users table
+    $user = User::where('email', $request->email)->first();
+    $user->password_reset_token = $token;
+    $user->password_reset_expires_at = Carbon::now()->addMinutes(60); // Valid for 1 hour
+    $user->save();
+
+    // Generate reset link
+    $resetLink = url('/reset-password/' . $token);
+
+    // Send email via Brevo
+    $this->sendResetEmailViaBrevo($user->email, $user->name, $resetLink);
+
+    return response()->json(['success' => true, 'message' => 'Password reset link sent!']);
+}
+    // Show Reset Password Form
+    public function showResetForm($token)
+    {
+        // Check if the token is valid
+        $user = \App\Models\User::where('password_reset_token', $token)
+            ->where('password_reset_expires_at', '>', Carbon::now())
+            ->first();
+    
+        // If token is invalid or expired, redirect to login
+        if (!$user) {
+            return redirect()->route('user.login')->with('error', 'Invalid or expired reset link. Please request a new one.');
+        }
+    
+        return view('user.reset-password', ['token' => $token]);
+    }
+    // Handle Password Reset
+ 
+    public function resetPassword(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|regex:/^\S*$/',
-            'confirm_password' => 'required|string|same:password',
-        ], [
-            'email.unique' => 'This email is already registered.',
-            'password.min' => 'Password must be at least 8 characters long.',
-            'confirm_password.same' => 'The confirm password must match the password.',
+            'password' => 'required|string|min:8|confirmed',
+            'token' => 'required'
         ]);
     
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        // Find user by token
+        $user = \App\Models\User::where('password_reset_token', $request->token)
+            ->where('password_reset_expires_at', '>', Carbon::now())
+            ->first();
     
-        return redirect()->route('user.login')->with('success', 'User created successfully!');
+        if (!$user) {
+            return response()->json(['success' => false, 'error' => 'Invalid or expired reset token.']);
+        }
+    
+        // Update password
+        $user->password = Hash::make($request->password);
+        $user->password_reset_token = null;
+        $user->password_reset_expires_at = null;
+        $user->save();
+        return redirect()->route('user.login')->with('success', 'Your password has been reset successfully. You can now log in.');
+
     }
     
-
      
     public function profile()
     {

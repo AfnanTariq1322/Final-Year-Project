@@ -41,6 +41,12 @@ Route::get('/user/profile', [UsersController::class, 'profile'])->name('user.pro
 
 Route::get('/user/dashboard', [UsersController::class, 'dashboard'])->name('user.dashboard');
  
+ Route::post('/verify-otp', [UsersController::class, 'verifyOtp'])->name('user.verifyOtp');
+Route::post('/resend-otp', [UsersController::class, 'resendOtp'])->name('user.resendOtp');
+Route::post('/forgot-password', [UsersController::class, 'sendResetLink'])->name('user.forgotPassword');
+Route::get('/reset-password/{token}', [UsersController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [UsersController::class, 'resetPassword'])->name('password.update');
+
 }); 
 
 
@@ -77,3 +83,5 @@ Route::middleware(['web','AuthCheck'])->group(function () {
 
 }); 
 
+
+ 
