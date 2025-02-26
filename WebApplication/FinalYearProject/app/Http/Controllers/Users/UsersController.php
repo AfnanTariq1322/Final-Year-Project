@@ -91,6 +91,44 @@ public function home(Request $request)
         'LoggedUserInfo' => $user // Pass the entire user object
     ]);
 }
+
+
+public function contact(Request $request)
+{
+    // Retrieve the logged-in user info
+    $userId = $request->session()->get('LoggedUserInfo');
+
+    // Fetch user details from the database
+    $user = User::find($userId);
+    
+    $users = User::take(8)->get(); // or User::limit(8)->get();
+   
+    // Pass user info and LoggedUserInfo to the view
+    return view('contact', [
+        'user' => $user, 
+        'users' => $users, 
+
+        'LoggedUserInfo' => $user // Pass the entire user object
+    ]);
+}
+public function about(Request $request)
+{
+    // Retrieve the logged-in user info
+    $userId = $request->session()->get('LoggedUserInfo');
+
+    // Fetch user details from the database
+    $user = User::find($userId);
+    
+    $users = User::take(8)->get(); // or User::limit(8)->get();
+   
+    // Pass user info and LoggedUserInfo to the view
+    return view('about', [
+        'user' => $user, 
+        'users' => $users, 
+
+        'LoggedUserInfo' => $user // Pass the entire user object
+    ]);
+}
     public function login() {
         return view("user.login");
     }
@@ -300,8 +338,8 @@ public function check(Request $request)
 
          return redirect()->route('home');
     }
-    private function sendResetEmailViaBrevo($email, $name, $resetLink)
-{
+private function sendResetEmailViaBrevo($email, $name, $resetLink)
+ {
     $apiKey = "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";
 
     $data = [
@@ -449,6 +487,7 @@ $apiKey = "xkeysib-eded1ae2acf66750e2eefef34560fbb1f31e0b1c39c49757025bfa14f613c
 /**
  * Send email via Brevo API
  */
+
 public function verifyOtp(Request $request)
 {
     $request->validate([
@@ -477,7 +516,8 @@ public function verifyOtp(Request $request)
     ]);
 
     return response()->json(['success' => true, 'message' => 'Email verified successfully!']);
-}public function resendOtp(Request $request)
+}
+public function resendOtp(Request $request)
 {
     $request->validate([
         'email' => 'required|email|exists:users,email',

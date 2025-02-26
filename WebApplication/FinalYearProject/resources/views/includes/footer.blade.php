@@ -67,13 +67,7 @@
                             <p class="copyright-text">Copyright @2024 All rights reserved <a href=" "
                                     target="_blank">Afnan</a></p>
 
-                            <ul class="inflanar-social inflanar-social__v2">
-                                <li><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fa-brands fa-behance"></i></a></li>
-                                <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
-                                <li><a href="#"><i class="fa-brands fa-linkedin"></i></a></li>
-                                <li><a href="#"><i class="fa-brands fa-facebook-f"></i></a></li>
-                            </ul>
+                         
 
                         </div>
                     </div>

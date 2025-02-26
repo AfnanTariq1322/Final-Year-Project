@@ -19,7 +19,9 @@
                                             <li class="{{ request()->routeIs('home') ? 'active' : '' }}">
                                                 <a href="{{ route('home') }}" class="menu-blogs">Home</a>
                                             </li>
-                                            <li><a href="/about">About</a></li>
+                                             <li class="{{ request()->routeIs('about') || request()->routeIs('about') ? 'active' : '' }}">
+    <a href="{{ route('about') }}" class="menu-blogs">About</a>
+</li>
 
                                             <li class="{{ request()->routeIs('blogs') || request()->routeIs('blogdetail') ? 'active' : '' }}">
     <a href="{{ route('blogs') }}" class="menu-blogs">Our Blogs</a>
@@ -27,7 +29,9 @@
 
 
                                             <li><a href="">Diseases</a></li>
-                                            <li><a href="">Contact Us</a></li>
+                                            <li class="{{ request()->routeIs('contact') || request()->routeIs('contact') ? 'active' : '' }}">
+    <a href="{{ route('contact') }}" class="menu-blogs">Contact Us</a>
+</li>
                                         </ul>
                                     </div>
                                 </div>

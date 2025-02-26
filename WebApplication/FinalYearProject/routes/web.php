@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Users\UsersController;
 use App\Http\Controllers\Admins\AdminController;
 use App\Http\Controllers\Blogs\BlogController;
+use App\Http\Controllers\Newsletter\NewsletterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,9 @@ Route::get('/', function () {
 });
 
 Route::get('/home', [UsersController::class, 'home'])->name('home');
+Route::get('/about', [UsersController::class, 'about'])->name('about');
+Route::get('/contact', [UsersController::class, 'contact'])->name('contact');
+
 Route::get('/blogs', [UsersController::class, 'blogs'])->name('blogs');
  Route::get('/blog/{id}', [UsersController::class, 'showBlog'])->name('blogdetail');
  Route::get('/blogs/{id}', [UsersController::class, 'filterBlogsByCategory'])->name('blogs.filter');
@@ -85,3 +89,10 @@ Route::middleware(['web','AuthCheck'])->group(function () {
 
 
  
+
+
+
+
+
+Route::post('/subscribe-newsletter', [NewsletterController::class, 'subscribe']);
+Route::get('/confirm-subscription', [NewsletterController::class, 'confirmSubscription']);
