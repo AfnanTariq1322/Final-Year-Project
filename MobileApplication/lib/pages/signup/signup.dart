@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, prefer_const_constructors, avoid_print, use_build_context_synchronously, library_private_types_in_public_api, unnecessary_import
+// ignore_for_file: unnecessary_import, library_private_types_in_public_api, prefer_const_constructors, avoid_print, use_build_context_synchronously
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
