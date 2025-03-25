@@ -19,18 +19,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-Route::post('/register', [UserController::class, 'register']);
-  
+// Authentication Routes
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/verify-otp', [UserController::class, 'verifyOtp']);
 Route::post('/resend-otp', [UserController::class, 'resendOtp']);
 Route::post('/send-reset-link', [UserController::class, 'sendResetLink']);
-
-
-
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout']);
-Route::post('/refresh', [UserController::class, 'refresh']); 
-Route::get('/me', [UserController::class, 'me']);
-Route::get('/dashboard', [UserController::class, 'dashboard']); 
+Route::post('/refresh', [UserController::class, 'refresh']);
+
+// Protected Routes (Require Authentication)
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/me', [UserController::class, 'me']);
+    Route::get('/dashboard', [UserController::class, 'dashboard']);
+});
