@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nearby Doctors</title>
+    <script>
+        const API_KEY = "AlzaSyShxZiofKW49QMSIs90y5BRQuDsCYPlUiV"; // Your API key
+
+        async function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                    let lat = position.coords.latitude;
+                    let lng = position.coords.longitude;
+                    document.getElementById("status").innerText = `Your Location: (${lat}, ${lng})`;
+                    await findNearbyDoctors(lat, lng);
+                }, (error) => {
+                    console.error("Error getting location:", error);
+                    document.getElementById("status").innerText = "Location access denied!";
+                });
+            } else {
+                document.getElementById("status").innerText = "Geolocation not supported!";
+            }
+        }
+
+        async function findNearbyDoctors(lat, lng) {
+            const url = `https://maps.gomaps.pro/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1000&type=doctor&key=${API_KEY}`;
+            
+            try {
+                let response = await fetch(url);
+                let data = await response.json();
+                
+                if (data.results.length === 0) {
+                    document.getElementById("results").innerHTML = "<p>No doctors found nearby.</p>";
+                    return;
+                }
+
+                let resultHTML = "<h2>Nearby Doctors</h2><ul>";
+                data.results.forEach(place => {
+                    let name = place.name || "Unknown";
+                    let address = place.vicinity || "Address not available";
+                    let mapLink = `https://www.google.com/maps/search/?api=1&query=${place.geometry.location.lat},${place.geometry.location.lng}`;
+
+                    resultHTML += `<li><strong>${name}</strong><br>${address}<br><a href="${mapLink}" target="_blank">View on Map</a></li><hr>`;
+                });
+                resultHTML += "</ul>";
+
+                document.getElementById("results").innerHTML = resultHTML;
+            } catch (error) {
+                console.error("Error fetching nearby doctors:", error);
+                document.getElementById("results").innerHTML = "<p>Error loading data.</p>";
+            }
+        }
+
+        window.onload = getUserLocation;
+    </script>
+</head>
+<body>
+    <h1>Find Nearby Doctors</h1>
+    <p id="status">Getting your location...</p>
+    <div id="results"></div>
+</body>
+</html>

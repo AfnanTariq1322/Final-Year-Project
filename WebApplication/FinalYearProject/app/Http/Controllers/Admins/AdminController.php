@@ -9,13 +9,13 @@ use Illuminate\Http\Request;
 use App\Events\SendAdminMessage;
  use App\Models\Blog;
 use App\Models\Category;
+use App\Models\Contact;
+
 use App\Models\Chat\SellerAdminChat;
 use App\Models\Doctor\Doctor;
 use App\Models\Seller\Seller;
  use App\Models\Admin;
-use App\Models\Contact\Contact;
-use App\Models\Contact\ContactUs;
- use App\Models\Product\Product;
+  use App\Models\Product\Product;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash; 
@@ -117,7 +117,24 @@ class AdminController extends Controller
     
              return view('admin.user', ['users' => $users, 'LoggedAdminInfo' => $LoggedAdminInfo]);
         }
-       
+
+        public function contact(Request $request)
+        {
+            $LoggedAdminInfo = Admin::find(session('LoggedAdminInfo'));
+            if (!$LoggedAdminInfo) {
+                return redirect()->route('admin.login')->with('fail', 'You must be logged in to access the dashboard');
+            }
+        
+            $users = User::paginate(5);
+            $contacts = Contact::paginate(10); // Fetch contacts data with pagination
+        
+            return view('admin.contact', [
+                'users' => $users,
+                'contacts' => $contacts, // Pass contacts to the view
+                'LoggedAdminInfo' => $LoggedAdminInfo
+            ]);
+        }
+        
         public function blog(Request $request)
         {
             // Get the logged-in admin info

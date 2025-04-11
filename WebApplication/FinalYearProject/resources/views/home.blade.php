@@ -202,18 +202,21 @@
 
                                
                             <!-- Buttons for Choose Image and Open Camera -->
-                                <div class="image-actions">
-                                <button class="btn choose-image" id="chooseImageBtn">
+                                  <div class="image-actions">
+                                     <!--  <button class="btn choose-image" id="chooseImageBtn">
                                     <i class="fas fa-file-image"></i> Choose Image
                                 </button>
                                 <input type="file" id="fileInput" accept="image/*" style="display: none;" />
-
+-->
 
                                 <!-- Modal for Image Preview -->
-                                <!-- Open Camera Button -->
+                                <!-- Open Camera Button
                                 <button class="btn open-camera" id="openCameraBtn">
                                     <i class="fas fa-camera-retro"></i> Open Camera
-                                </button>
+                                </button> -->
+                                <a href="{{ route('diagnosis') }}" class="btn go-to-diagnosis">
+                                    <i class="fas fa-stethoscope"></i> Start Diagnosis
+                                </a>
                                 <video id="cameraStream" autoplay
                                     style="display: none; width: 100%; height: auto;"></video>
                             </div>

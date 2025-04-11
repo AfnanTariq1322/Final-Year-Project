@@ -256,8 +256,7 @@ function openForgotPasswordModal() {
     let forgotPasswordModal = new bootstrap.Modal(document.getElementById("forgotPasswordModal"));
     forgotPasswordModal.show();
 }
-
-	document.querySelector("form").addEventListener("submit", function (event) {
+document.querySelector("form").addEventListener("submit", function (event) {
     event.preventDefault(); // Prevent form from reloading
 
     let formData = new FormData(this);
@@ -273,21 +272,19 @@ function openForgotPasswordModal() {
     .then(({ status, body }) => {
         if (!body.success) {
             if (body.otp_required) {
-                // ✅ Open the OTP modal (same as register page)
+                // ✅ Open the OTP modal (but don't trigger "Resend OTP")
                 document.getElementById("otp_email").value = body.email;
                 document.getElementById("otpMessage").innerText = "Please verify your email before logging in.";
 
                 let otpModal = new bootstrap.Modal(document.getElementById("otpModal"));
                 otpModal.show();
 
-                // Resend OTP automatically
-                resendOtp();
+                // ❌ Removed automatic `resendOtp();`
             } else {
-    let generalError = document.getElementById("generalError"); // Get error container
-    generalError.innerText = body.error; // Set error message
-    generalError.style.display = "block"; // Show the error
-}
-
+                let generalError = document.getElementById("generalError"); // Get error container
+                generalError.innerText = body.error; // Set error message
+                generalError.style.display = "block"; // Show the error
+            }
         } else {
             window.location.href = body.redirect;
         }

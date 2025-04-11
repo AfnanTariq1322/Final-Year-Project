@@ -27,8 +27,12 @@
     <a href="{{ route('blogs') }}" class="menu-blogs">Our Blogs</a>
 </li>
 
-
-                                            <li><a href="">Diseases</a></li>
+<li class="{{ request()->routeIs('diagnosis') || request()->routeIs('diagnosis') ? 'active' : '' }}">
+    <a href="{{ route('diagnosis') }}" class="menu-blogs">Diagnosis</a>
+</li>
+                                             
+                                          
+                                          
                                             <li class="{{ request()->routeIs('contact') || request()->routeIs('contact') ? 'active' : '' }}">
     <a href="{{ route('contact') }}" class="menu-blogs">Contact Us</a>
 </li>

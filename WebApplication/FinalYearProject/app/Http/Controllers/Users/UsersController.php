@@ -91,7 +91,24 @@ public function home(Request $request)
         'LoggedUserInfo' => $user // Pass the entire user object
     ]);
 }
+public function diagnosis(Request $request)
+{
+    // Retrieve the logged-in user info
+    $userId = $request->session()->get('LoggedUserInfo');
 
+    // Fetch user details from the database
+    $user = User::find($userId);
+    
+    $users = User::take(8)->get(); // or User::limit(8)->get();
+   
+    // Pass user info and LoggedUserInfo to the view
+    return view('diagnosis', [
+        'user' => $user, 
+        'users' => $users, 
+
+        'LoggedUserInfo' => $user // Pass the entire user object
+    ]);
+}
 
 public function contact(Request $request)
 {
@@ -302,6 +319,10 @@ public function check(Request $request)
         return response()->json(['success' => false, 'error' => 'Email not found.']);
     }
  
+    // Verify password
+    if (!Hash::check($request->password, $userInfo->password)) {
+        return response()->json(['success' => false, 'error' => 'Incorrect password.']);
+    }
 
     // ✅ Check if the email is verified
     if (!$userInfo->is_verified) {
@@ -312,11 +333,13 @@ public function check(Request $request)
         ]);
     }
 
-    // Verify password
-    if (!Hash::check($request->password, $userInfo->password)) {
-        return response()->json(['success' => false, 'error' => 'Incorrect password.']);
-    }
-
+   // ✅ Check if user status is inactive
+   if ($userInfo->status === 'inactive') {
+    return response()->json([
+        'success' => false,
+        'error' => 'Your account is currently inactive. Please wait for admin approval.'
+    ]);
+}
     // Set session variables
     session([
         'LoggedUserInfo' => $userInfo->id,
@@ -338,6 +361,8 @@ public function check(Request $request)
 
          return redirect()->route('home');
     }
+
+    
 private function sendResetEmailViaBrevo($email, $name, $resetLink)
  {
     $apiKey = "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";
@@ -452,15 +477,12 @@ $apiKey = "xkeysib-eded1ae2acf66750e2eefef34560fbb1f31e0b1c39c49757025bfa14f613c
         'confirm_password.same' => 'The confirm password must match the password.',
     ]);
 
-    // If validation fails, return JSON errors
     if ($validator->fails()) {
-        Log::error('Validation Failed: ' . json_encode($validator->errors()->toArray()));
         return response()->json([
             'success' => false,
             'errors' => $validator->errors()
         ], 422);
     }
-
     // Generate OTP
     $otp = rand(100000, 999999);
     $otpExpiresAt = now()->addMinutes(10);
@@ -613,54 +635,69 @@ public function sendResetLink(Request $request)
     
           return view('user.profile', ['LoggedUserInfo' => $LoggedUserInfo]);
     }
- 
     public function updateProfile(Request $request)
     {
-        // Fetch the logged-in user's information using the correct session key
-        $loggedUser = User::find(session('LoggedUserInfo'));
+        try {
+            // Fetch the logged-in user
+            $loggedUser = User::find(session('LoggedUserInfo'));
     
-        // Check if the user is logged in
-        if (!$loggedUser) {
-            return redirect()->route('user.login')->with('fail', 'You must be logged in to access the profile.');
+            if (!$loggedUser) {
+                return redirect()->route('user.login')
+                    ->with('fail', 'You must be logged in to access the profile.');
+            }
+    
+            // Validate input
+            $validatedData = $request->validate([
+                'name' => 'nullable|string|max:255',
+                'phone' => 'nullable|string|max:20',
+                'country' => 'nullable|string|max:255',
+                'city' => 'nullable|string|max:255',
+                'address' => 'nullable|string|max:255',
+                'medical_history' => 'nullable|string',
+                'symptoms' => 'nullable|array',
+                'symptoms.*' => 'string',
+                'visual_acuity' => 'nullable|string|max:50',
+                'eye_condition' => 'nullable|string|max:255',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+    
+            // Convert symptoms array to JSON
+            if ($request->has('symptoms')) {
+                $validatedData['symptoms'] = json_encode($request->symptoms);
+            }
+    
+            // Handle profile image
+            if ($request->hasFile('image')) {
+                if ($loggedUser->image) {
+                    $oldImagePath = storage_path('app/public/' . $loggedUser->image);
+                    if (file_exists($oldImagePath)) {
+                        unlink($oldImagePath);
+                    }
+                }
+    
+                $imageFile = $request->file('image');
+                $imageName = time() . '_' . uniqid() . '.' . $imageFile->getClientOriginalExtension();
+                $imagePath = $imageFile->storeAs('profile', $imageName, 'public');
+    
+                $validatedData['image'] = $imagePath;
+            }
+    
+            // Update profile
+            $loggedUser->update($validatedData);
+    
+            return redirect()->back()->with('success', 'Profile updated successfully!');
+    
+        } catch (\Exception $e) {
+            \Log::error('Profile update error: ' . $e->getMessage());
+    
+            return redirect()->back()
+                ->with('error', 'An error occurred while updating your profile. Please try again.')
+                ->withInput();
         }
-    
-        // Validate the incoming request data
-        $request->validate([
-            'name' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',  // Disabled in form, but validate if present
-            'bloodgroup' => 'nullable|string|max:10',
-            'bloodpressure' => 'nullable|string|max:20',
-            'phone' => 'nullable|string|max:20',
-            'country' => 'nullable|string|max:255',
-            'city' => 'nullable|string|max:255',
-            'address' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',  // Handle profile image upload
-        ]);
-    
-        // Update the user's profile with validated data
-        $loggedUser->name = $request->input('name');
-        $loggedUser->bloodgroup = $request->input('bloodgroup');
-        $loggedUser->bloodpressure = $request->input('bloodpressure');
-        $loggedUser->phone = $request->input('phone');
-        $loggedUser->country = $request->input('country');
-        $loggedUser->city = $request->input('city');
-        $loggedUser->address = $request->input('address');
-    
-        // Handle the profile image upload if a file is provided
-        if ($request->hasFile('image')) {
-            // Store the uploaded image in 'public/profile' folder
-            $imageFile = $request->file('image');
-            $imagePath = $imageFile->store('public/profile');
-            // Store the relative path (without 'public/') in the database
-            $loggedUser->image = str_replace('public/', '', $imagePath);
-        }
-    
-        // Save the updated user profile
-        $loggedUser->save();
-    
-        // Redirect to the user's profile view with a success message
-        return redirect()->back()->with('success', 'Profile updated successfully!');
     }
+    
+    
+    
     
 
     

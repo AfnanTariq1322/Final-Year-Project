@@ -5,6 +5,7 @@ use App\Http\Controllers\Users\UsersController;
 use App\Http\Controllers\Admins\AdminController;
 use App\Http\Controllers\Blogs\BlogController;
 use App\Http\Controllers\Newsletter\NewsletterController;
+use App\Http\Controllers\Contact\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +22,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::post('/contact-us', [ContactController::class, 'store'])->name('contact.store');
+
 Route::get('/home', [UsersController::class, 'home'])->name('home');
 Route::get('/about', [UsersController::class, 'about'])->name('about');
 Route::get('/contact', [UsersController::class, 'contact'])->name('contact');
+Route::get('/diagnosis', [UsersController::class, 'diagnosis'])->name('diagnosis');
 
 Route::get('/blogs', [UsersController::class, 'blogs'])->name('blogs');
  Route::get('/blog/{id}', [UsersController::class, 'showBlog'])->name('blogdetail');
@@ -35,6 +39,7 @@ Route::post('/user/save', [UsersController::class, 'save'])->name('user.save');
 Route::post('/user/check', [UsersController::class, 'check'])->name('user.check');
 Route::post('/user/logout', [UsersController::class, 'logout'])->name('user.logout');
 Route::post('/profile/update', [UsersController::class, 'updateProfile'])->name('user.updateProfile');
+Route::post('/user/save', [UsersController::class, 'save'])->name('user.save');
 
 Route::middleware(['web','AuthCheck'])->group(function () {
 
@@ -79,6 +84,8 @@ Route::middleware(['web','AuthCheck'])->group(function () {
     Route::post('/admin/blogs/store', [AdminController::class, 'storeBlog'])->name('admin.blogs.store');
     Route::delete('/admin/blogs/{id}', [AdminController::class, 'destroyBlog'])->name('admin.blogs.destroy');
     Route::put('/admin/blogs/{id}', [AdminController::class, 'updateBlog'])->name('admin.blog.update');
+    Route::get('/admin/user', [AdminController::class, 'user'])->name('admin.user');
+    Route::get('/admin/contact', [AdminController::class, 'contact'])->name('admin.contact');
 
     Route::get('/admin/category', [AdminController::class, 'category'])->name('admin.category');
     Route::post('/admin/category/add', [AdminController::class, 'addCategory'])->name('category.add');

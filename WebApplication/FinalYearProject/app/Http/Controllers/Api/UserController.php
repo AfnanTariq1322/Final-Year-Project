@@ -282,7 +282,111 @@ class UserController extends Controller
                 return response()->json(['success' => false, 'error' => 'Failed to logout: ' . $e->getMessage()], 400);
             }
         }
+        public function getProfile(Request $request)
+        {
+            try {
+                $token = $request->header('Authorization');
+                if (!$token) {
+                    return response()->json(['success' => false, 'error' => 'Token not provided'], 401);
+                }
+                $token = str_replace('Bearer ', '', $token);
+                
+                $user = JWTAuth::setToken($token)->authenticate();
+                if (!$user) {
+                    return response()->json(['success' => false, 'error' => 'User not found'], 404);
+                }
+        
+                return response()->json([
+                    'success' => true,
+                    'user' => $user // Returns all user data dynamically
+                ]);
+        
+            } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+                return response()->json(['success' => false, 'error' => 'Token expired'], 401);
+            } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+                return response()->json(['success' => false, 'error' => 'Invalid token'], 401);
+            } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+                return response()->json(['success' => false, 'error' => 'Token error: ' . $e->getMessage()], 401);
+            }
+        }
+        
     
+        public function updateProfile(Request $request)
+        {
+            try {
+                $token = $request->header('Authorization');
+                if (!$token) {
+                    return response()->json(['success' => false, 'error' => 'Token not provided'], 401);
+                }
+        
+                $token = str_replace('Bearer ', '', $token);
+                $user = JWTAuth::setToken($token)->authenticate();
+                if (!$user) {
+                    return response()->json(['success' => false, 'error' => 'User not found'], 404);
+                }
+        
+                // Validate the request data
+                $validator = Validator::make($request->all(), [
+                    'name' => 'nullable|string|max:255',
+                    'phone' => 'nullable|string|max:20',
+                    'country' => 'nullable|string|max:100',
+                    'city' => 'nullable|string|max:100',
+                    'address' => 'nullable|string|max:255',
+                    'medical_history' => 'nullable|string',
+                    'symptoms' => 'nullable|array',
+                    'symptoms.*' => 'string',
+                    'visual_acuity' => 'nullable|string|max:50',
+                    'eye_condition' => 'nullable|string|max:255',
+                    'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                ]);
+        
+                if ($validator->fails()) {
+                    return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+                }
+        
+                // Prepare data
+                $data = $request->only([
+                    'name', 'phone', 'country', 'city', 'address', 'medical_history', 'visual_acuity', 'eye_condition'
+                ]);
+        
+                if ($request->has('symptoms')) {
+                    $data['symptoms'] = json_encode($request->symptoms); // Store as JSON
+                }
+        
+                // Handle image upload
+                if ($request->hasFile('image')) {
+                    if ($user->image) {
+                        $oldImagePath = storage_path('app/public/' . $user->image);
+                        if (file_exists($oldImagePath)) {
+                            unlink($oldImagePath);
+                        }
+                    }
+        
+                    $image = $request->file('image');
+                    $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                    $imagePath = $image->storeAs('profile', $imageName, 'public');
+        
+                    $data['image'] = $imagePath;
+                }
+        
+                // Update user profile
+                $user->update($data);
+        
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Profile updated successfully',
+                    'user' => $user
+                ]);
+        
+            } catch (\Exception $e) {
+                \Log::error('Profile update error: ' . $e->getMessage());
+                return response()->json(['success' => false, 'error' => 'An error occurred while updating your profile.'], 500);
+            }
+        }
+        
+        
+        
+        
         // REFRESH TOKEN
         public function refresh(Request $request)
         {

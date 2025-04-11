@@ -1,48 +1,34 @@
 <!DOCTYPE html>
-<html class="no-js" lang="ZXX">
+<html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="keywords" content="Site keywords here">
-    <meta name="description" content="#">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <meta name="robots" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Zenix - Crypto Admin Dashboard">
+    <meta property="og:title" content="Zenix - Crypto Admin Dashboard">
+    <meta property="og:description" content="Zenix - Crypto Admin Dashboard">
+    <meta property="og:image" content="https://zenix.dexignzone.com/xhtml/social-image.png">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <title>Fundus Disease Analysis - Dashboard</title>
+    <head>
+        <title>Admin Dashboard</title>
+        <!-- Favicon icon -->
+        <link rel="icon" type="image/png" href="{{ asset('storage/downloads/appicon.png') }}">
+    </head>
 
-    <link rel="icon" href="../img/newicon.png">
-
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
-    <!-- FONTAWESOME -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-
-    <link rel="stylesheet" href="../css/jquery-ui.min.css">
-
-    <link rel="stylesheet" href="../css/animate.min.css">
-
-    <link rel="stylesheet" href="../css/aos.min.css">
-
-    <link rel="stylesheet" href="../css/font-awesome-all.min.css">
-
-    <link rel="stylesheet" href="../css/swiper-slider.min.css">
-
-    <link rel="stylesheet" href="../css/select2-min.css">
-
-    <link rel="stylesheet" href="../css/datatables.min.css">
-
-    <link rel="stylesheet" href="../css/video-popup.min.css">
-
-    <link rel="stylesheet" href="{{ asset('css/theme-default.css') }}">
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../AdminTemplate/vendor/chartist/css/chartist.min.css">
+    <link href="../AdminTemplate/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="../AdminTemplate/vendor/owl-carousel/owl.carousel.css" rel="stylesheet">
+    <link href="../AdminTemplate/css/style.css" rel="stylesheet">
 
 </head>
+
 
 <body>
 
@@ -98,41 +84,37 @@
                 <div class="col-lg-12 col-12 mg-top-30">
                     <div class="inflanar-comments-form inflanar-comments-form--reviews">
                         <h3 class="inflanar-contact-form__title m-0">Feel Free to Get in Touch</h3>
-                        <form action="/contact-us" method="POST">
+                        <form action="{{ route('contact.store') }}" method="POST">
+                            @csrf
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group inflanar-form-input">
                                         <label>Name*</label>
-                                        <input class="ecom-wc__form-input" type="text" name="name"
-                                            placeholder="Your Name" required>
+                                        <input class="ecom-wc__form-input" type="text" name="name" placeholder="Your Name" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group inflanar-form-input">
                                         <label>Phone*</label>
-                                        <input class="ecom-wc__form-input" type="text" name="phone"
-                                            placeholder="Your Phone" required>
+                                        <input class="ecom-wc__form-input" type="text" name="phone" placeholder="Your Phone" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group inflanar-form-input">
                                         <label>Email*</label>
-                                        <input class="ecom-wc__form-input" type="email" name="email"
-                                            placeholder="Your Email" required>
+                                        <input class="ecom-wc__form-input" type="email" name="email" placeholder="Your Email" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group inflanar-form-input">
                                         <label>Subject*</label>
-                                        <input class="ecom-wc__form-input" type="text" name="subject"
-                                            placeholder="Your Subject" required>
+                                        <input class="ecom-wc__form-input" type="text" name="subject" placeholder="Your Subject" required>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-group inflanar-form-input">
                                         <label>Message*</label>
-                                        <textarea class="ecom-wc__form-input" name="message"
-                                            placeholder="Write your message" required></textarea>
+                                        <textarea class="ecom-wc__form-input" name="message" placeholder="Write your message" required></textarea>
                                     </div>
                                 </div>
                                 <div class="col-12 mg-top-20">
@@ -140,6 +122,7 @@
                                 </div>
                             </div>
                         </form>
+                        
                     </div>
                 </div>
 

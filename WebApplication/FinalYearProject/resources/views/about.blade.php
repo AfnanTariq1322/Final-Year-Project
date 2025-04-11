@@ -62,129 +62,64 @@
     </div>
 
     <br><br><br>
-    <section class="inflanar-breadcrumb">
-		<div class="container">
-			<div class="row">
-
-				<div class="col-12">
-					<div class="inflanar-breadcrumb__inner">
-						<div class="inflanar-breadcrumb__content">
-							<h2 class="inflanar-breadcrumb__title m-0">About Us</h2>
-							<ul class="inflanar-breadcrumb__menu list-none">
-								<li><a href="https://createrdirect.corammerswork.com/">Home</a></li>
-								<li class="active"><a href="about.html">About Us</a></li>
-							</ul>
-						</div>
-                        <div class="inflanar-breadcrumb__img">
-                            <div class="inflanar-breadcrumb__thumb">
-                            <img src="../img/retina-scanning.png" style="width: 250px; height: auto; ">
-
-
-                            </div>
-                            
-                        </div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-    <section class="section-editng-about">
+ 
+ 
+    <section class="inflanar-section-shape15 inflanar-bg-cover pd-top-90 pd-btm-120 inflanar-section-shape2">
         <div class="container">
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col-12">
-                    <div class="inflanar-features-list inflanar-section-shape14 inflanar-bg-cover">
-                        <div class="row">
-                            <div class="col-12">
-
-                                <div class="inflanar-section__head inflanar-section__center mg-btm-20">
-                                    <span class="inflanar-section__badge inflanar-primary-color m-0 color-white aos-init aos-animate" data-aos="fade-in" data-aos-delay="300">
-                                        <span>Best Feature</span>
-                                    </span>
-                                    <h2 class="inflanar-section__title color-white aos-init aos-animate" data-aos="fade-in" data-aos-delay="400">Our
-                                        Latest Features</h2>
+                    <div class="inflanar-about__row inflanar-row-gap">
+                        <div class="inflanar-about__img mg-top-30">
+                            <div class="about-image-container">
+                                <img src="{{ asset('../img/about-section.png') }}" alt="About Our Technology" class="about-image">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <i class="fas fa-microscope"></i>
+                                        <span>AI-Powered Analysis</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row inflanar-features-gap">
-                            <div class="col-lg-3 col-md-6 col-sm-12 mg-top-30 aos-init aos-animate" data-aos="fade-in" data-aos-delay="400">
-
-                                <div class="inflanar-features-list__single">
-                                    <div class="inflanar-features-list__head">
-                                        <div class="inflanar-features-list__first">
-                                            <div class="inflanar-features-list__icon ">
-                                                <img src="img/st-feature-icon1.svg" alt="#">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="inflanar-features-list__body">
-                                        <h4 class="inflanar-features-list__title color-white">No upfront Cost</h4>
-                                        <p class="inflanar-features-list__text color-white">Experience the advantage of
-                                            zero upfront
-                                            costs. Collaborate with our team for bespoke creator-led advertising
-                                            strategies, tailored to elevate your brand.</p>
-                                    </div>
-                                </div>
-
+    
+                        <div class="inflanar-about__content mg-top-30 aos-init aos-animate" data-aos="fade-in" data-aos-delay="300">
+                            <div class="inflanar-section__head mg-btm-20">
+                                <span class="inflanar-section__badge inflanar-primary-color m-0 color-white">
+                                    <i class="fas fa-brain"></i>
+                                    <span>About Our Technology</span>
+                                </span>
+                                <h2 class="inflanar-section__title inflanar-section__title--medium mg-btm-20 color-white aos-init aos-animate" data-aos="fade-in" data-aos-delay="400">
+                                    Revolutionizing Eye Disease Detection with AI
+                                </h2>
+                                <p class="color-white">
+                                    Our advanced **Fundus Image Analysis** system leverages cutting-edge AI and deep learning to detect 
+                                    eye diseases with unprecedented precision. By analyzing retinal images, we can identify conditions 
+                                    like **diabetic retinopathy, glaucoma, and macular degeneration** at an early stage, 
+                                    helping in timely treatment and prevention.
+                                </p>
                             </div>
-                            <div class="col-lg-3 col-md-6 col-sm-12 mg-top-30 aos-init aos-animate" data-aos="fade-in" data-aos-delay="600">
-
-                                <div class="inflanar-features-list__single">
-                                    <div class="inflanar-features-list__head">
-                                        <div class="inflanar-features-list__first">
-                                            <div class="inflanar-features-list__icon inflanar-scolor-bg">
-                                                <img src="img/st-feature-icon2.svg" alt="#">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="inflanar-features-list__body">
-                                        <h4 class="inflanar-features-list__title color-white">Verified Creators</h4>
-                                        <p class="inflanar-features-list__text color-white">Engage with our network of
-                                            verified
-                                            creators for targeted, professional-grade advertising solutions that amplify
-                                            your brand's message with credibility and authenticity.</p>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-sm-12 mg-top-30 aos-init aos-animate" data-aos="fade-in" data-aos-delay="800">
-
-                                <div class="inflanar-features-list__single">
-                                    <div class="inflanar-features-list__head">
-                                        <div class="inflanar-features-list__first">
-                                            <div class="inflanar-features-list__icon inflanar-tcolor-bg">
-                                                <img src="img/st-feature-icon3.svg" alt="#">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="inflanar-features-list__body">
-                                        <h4 class="inflanar-features-list__title color-white">Live Chat</h4>
-                                        <p class="inflanar-features-list__text color-white">Interact instantly with our
-                                            live chat
-                                            feature, facilitating direct communication between creators and brands for
-                                            seamless collaboration and real-time campaign optimization.</p>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-sm-12 mg-top-30 aos-init aos-animate" data-aos="fade-in" data-aos-delay="1000">
-
-                                <div class="inflanar-features-list__single">
-                                    <div class="inflanar-features-list__head">
-                                        <div class="inflanar-features-list__first">
-                                            <div class="inflanar-features-list__icon inflanar-ylcolor-bg">
-                                                <img src="img/st-feature-icon4.svg" alt="#">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="inflanar-features-list__body">
-                                        <h4 class="inflanar-features-list__title color-white">Safe Camping</h4>
-                                        <p class="inflanar-features-list__text color-white">Ensure secure camping
-                                            experiences with
-                                            our comprehensive safety measures, providing peace of mind for outdoor
-                                            enthusiasts seeking adventure with confidence.</p>
-                                    </div>
-                                </div>
-
+                            <ul class="inflanar-list-style inflanar-list-style__row list-none mg-top-20">
+                                <li class="color-white">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    <span>AI-powered disease detection with 95% accuracy</span>
+                                </li>
+                                <li class="color-white">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    <span>Early diagnosis for better treatment outcomes</span>
+                                </li>
+                                <li class="color-white">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    <span>Fast & accurate fundus image analysis</span>
+                                </li>
+                                <li class="color-white">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    <span>Real-time results and detailed reports</span>
+                                </li>
+                            </ul>
+                            <div class="button-group mg-top-40">
+                                <a href="{{ route('diagnosis') }}" class="inflanar-btn inflanar-btn-outline">
+                                    <i class="fas fa-camera-retro"></i>
+                                    <span>Try Analysis Now</span>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -192,149 +127,539 @@
             </div>
         </div>
     </section>
-    <section class="inflanar-section-shape15 inflanar-bg-cover pd-top-90 pd-btm-120 inflanar-section-shape2">
-		<div class="container">
-			<div class="row align-items-center">
-				<div class="col-12">
-					<div class="inflanar-about__row inflanar-row-gap">
-
-						<div class="inflanar-about__img mg-top-30">
-							<img src="img/in-about-img.jpg" alt="#">
-						</div>
-
-						<div class="inflanar-about__content mg-top-30 aos-init aos-animate" data-aos="fade-in" data-aos-delay="300">
-							<div class="inflanar-section__head mg-btm-20">
-								<span class="inflanar-section__badge inflanar-primary-color m-0 color-white">
-									<span>About Creator</span>
-								</span>
-								<h2 class="inflanar-section__title inflanar-section__title--medium mg-btm-20 color-white aos-init aos-animate" data-aos="fade-in" data-aos-delay="400">Creative and First Problems Solving</h2>
-								<p class="color-white">Experience unparalleled professional problem-solving, where creativity meets
-									expertise. Our solutions redefine industry standards, ensuring your challenges are
-									met with precision and innovation. Trust us to elevate your brand through strategic
-									professionalism.</p>
-							</div>
-							<ul class="inflanar-list-style inflanar-list-style__row list-none mg-top-20 ">
-								<li class="color-white"><i class="fa-solid fa-circle-check"></i>Promote your business product</li>
-								<li class="color-white"><i class="fa-solid fa-circle-check"></i>Best client satisfaction</li>
-								<li class="color-white"><i class="fa-solid fa-circle-check"></i>Growing your business</li>
-							</ul>
-							<a href="contact.html" class="inflanar-btn mg-top-40 inflanar-btn-dark"><span>Contact Us</span></a>
-							<div class="inflanar-ceo">
-								<div class="inflanar-ceo__author">
-									<img src="img/in-ceo.png">
-									<h4 class="inflanar-ceo__title color-white">Sufankho Jhon <span class="color-white">CEO of Creator Direct</span>
-									</h4>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+    
+    <style>
+    /* About Section Styles */
+    .inflanar-section-shape15 {
+        background: linear-gradient(135deg, #604BB0 0%, #4a3a8c 100%);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .inflanar-section-shape15::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" fill="rgba(255,255,255,0.05)"/></svg>');
+        opacity: 0.1;
+    }
+    
+    /* About Image Styles */
+    .about-image-container {
+        position: relative;
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .about-image {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: transform 0.3s ease;
+    }
+    
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(96, 75, 176, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .about-image-container:hover .image-overlay {
+        opacity: 1;
+    }
+    
+    .about-image-container:hover .about-image {
+        transform: scale(1.05);
+    }
+    
+    .overlay-content {
+        text-align: center;
+        color: #fff;
+    }
+    
+    .overlay-content i {
+        font-size: 48px;
+        margin-bottom: 15px;
+    }
+    
+    .overlay-content span {
+        font-size: 18px;
+        font-weight: 500;
+    }
+    
+    /* Rest of your existing styles */
+    .inflanar-section__badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 20px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 25px;
+        margin-bottom: 20px;
+    }
+    
+    .inflanar-section__badge i {
+        font-size: 18px;
+    }
+    
+    .inflanar-list-style {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .inflanar-list-style li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 16px;
+    }
+    
+    .inflanar-list-style li i {
+        color: #2ecc71;
+        font-size: 18px;
+    }
+    
+    .button-group {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .inflanar-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 15px 30px;
+        border-radius: 25px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+    
+    .inflanar-btn-outline {
+        background: transparent;
+        color: #fff;
+        border: 2px solid #fff;
+    }
+    
+    .inflanar-btn-outline:hover {
+        background: #fff;
+        color: #604BB0;
+        transform: translateY(-2px);
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 991px) {
+        .inflanar-list-style {
+            grid-template-columns: 1fr;
+        }
+        
+        .button-group {
+            flex-direction: column;
+        }
+        
+        .inflanar-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    
+        .about-image-container {
+            max-width: 400px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .inflanar-section__title {
+            font-size: 28px;
+        }
+        
+        .about-image-container {
+            max-width: 300px;
+            margin-bottom: 30px;
+        }
+    }
+    </style>
 
     <br>
-    <section class="pd-top-120 pd-btm-120">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
+ 
+</section>
 
-                    <div class="inflanar-section__head inflanar-section__center text-center mg-btm-20">
-                        <span class="inflanar-section__badge inflanar-primary-color m-0 aos-init aos-animate" data-aos="fade-in" data-aos-delay="300">
-                            <span>Working Process</span>
-                        </span>
-                        <h2 class="inflanar-section__title aos-init aos-animate" data-aos="fade-in" data-aos-delay="400">How Dose It Work?
-                        </h2>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-12 mg-top-30 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
 
-                    <div class="inflanar-hcard inflanar-hcard--one">
-                        <div class="inflanar-hcard__img">
-                            <img src="img/in-howcard1.jpg" alt="#">
-                        </div>
-                        <div class="inflanar-hcard__content">
-                            <div class="inflanar-hcard__line"><img src="img/in-line-shape1.svg"></div>
-                            <h4 class="inflanar-hcard__label">
-                                <span>Step</span>
-                                <b>1</b>
-                            </h4>
-                            <h4 class="inflanar-hcard__title">Create Camping</h4>
-                            <p class="inflanar-hcard__text"> Our Creator Directory for expert camping enthusiasts who
-                                share tips on gear, survival skills, and the best outdoor experiences, igniting your
-                                passion for the great outdoors.</p>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="col-lg-3 col-md-6 col-12 mg-top-30 aos-init aos-animate" data-aos="fade-up" data-aos-delay="400">
-
-                    <div class="inflanar-hcard inflanar-hcard--two">
-                        <div class="inflanar-hcard__content inflanar-hcard__content__two">
-                            <h4 class="inflanar-hcard__label">
-                                <span>Step</span>
-                                <b>2</b>
-                            </h4>
-                            <h4 class="inflanar-hcard__title">Choose Influencer</h4>
-                            <p class="inflanar-hcard__text">Unlock a world of influence with our Creator Directory,
-                                connecting you to top influencers who inspire and shape trends across various domains,
-                                bringing unparalleled insights to your fingertips.</p>
-                            <div class="inflanar-hcard__line"><img src="img/in-line-shape2.svg"></div>
-                        </div>
-                        <div class="inflanar-hcard__img">
-                            <img src="img/in-howcard2.jpg" alt="#">
-                        </div>
-                    </div>
-
-                </div>
-                <div class="col-lg-3 col-md-6 col-12 mg-top-30 aos-init aos-animate" data-aos="fade-up" data-aos-delay="600">
-
-                    <div class="inflanar-hcard inflanar-hcard--one">
-                        <div class="inflanar-hcard__img">
-                            <img src="img/in-howcard3.jpg" alt="#">
-                        </div>
-                        <div class="inflanar-hcard__content">
-                            <div class="inflanar-hcard__line inflanar-hcard__line--v2"><img src="img/in-line-shape3.svg"></div>
-                            <h4 class="inflanar-hcard__label">
-                                <span>Step</span>
-                                <b>3</b>
-                            </h4>
-                            <h4 class="inflanar-hcard__title">Monitor Your Campaign</h4>
-                            <p class="inflanar-hcard__text">Navigate success with our Campaign Monitoring Creator
-                                Directory, featuring skilled professionals adept at tracking, optimizing, and elevating
-                                your campaigns for maximum impact in the dynamic business landscape.</p>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="col-lg-3 col-md-6 col-12 mg-top-30 aos-init aos-animate" data-aos="fade-up" data-aos-delay="800">
-
-                    <div class="inflanar-hcard inflanar-hcard--two">
-                        <div class="inflanar-hcard__content inflanar-hcard__content__two">
-                            <h4 class="inflanar-hcard__label">
-                                <span>Step</span>
-                                <b>4</b>
-                            </h4>
-                            <h4 class="inflanar-hcard__title">Check Your Report</h4>
-                            <p class="inflanar-hcard__text">Empower your insights with our Report Checking Creator
-                                Directory, connecting you to experts who meticulously analyze and enhance your reports,
-                                ensuring precision and strategic clarity in every detail.</p>
-                            <div class="inflanar-hcard__line inflanar-hcard__line--v3"><img src="img/in-line-shape2.svg"></div>
-                        </div>
-                        <div class="inflanar-hcard__img">
-                            <img src="img/in-howcard4.jpg" alt="#">
-                        </div>
-                    </div>
-
+<section class="pd-top-120 pd-btm-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="inflanar-section__head inflanar-section__center text-center mg-btm-20">
+                    <span class="inflanar-section__badge inflanar-primary-color m-0 aos-init aos-animate" data-aos="fade-in" data-aos-delay="300">
+                        <i class="fas fa-cogs"></i>
+                        <span>Working Process</span>
+                    </span>
+                    <h2 class="inflanar-section__title aos-init aos-animate" data-aos="fade-in" data-aos-delay="400">How It Works</h2>
                 </div>
             </div>
         </div>
-    </section>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-12 mg-top-30 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
+                <div class="inflanar-hcard inflanar-hcard--one">
+                    <div class="inflanar-hcard__img">
+                        <img src="{{ asset('img/register.png') }}" alt="Register">
+                    </div>
+                    <div class="inflanar-hcard__content">
+                        <div class="inflanar-hcard__line"> </div>
+                        <h4 class="inflanar-hcard__label">
+                            <span>Step</span>
+                            <b>1</b>
+                        </h4>
+                        <h4 class="inflanar-hcard__title">Register Account</h4>
+                        <p class="inflanar-hcard__text">Create your account to access our AI-powered eye disease detection platform. Get personalized care and track your health journey.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-12 mg-top-30 aos-init aos-animate" data-aos="fade-up" data-aos-delay="400">
+                <div class="inflanar-hcard inflanar-hcard--two">
+                    <div class="inflanar-hcard__content inflanar-hcard__content__two">
+                        <h4 class="inflanar-hcard__label">
+                            <span>Step</span>
+                            <b>2</b>
+                        </h4>
+                        <h4 class="inflanar-hcard__title">Upload Fundus Image</h4>
+                        <p class="inflanar-hcard__text">Upload your fundus image through our diagnosis page. You can either choose an image from your device or use the camera to capture one.</p>
+                        <div class="inflanar-hcard__line"> </div>
+                    </div>
+                    <div class="inflanar-hcard__img">
+                        <img src="{{ asset('img/dia.png') }}" alt="Upload Image">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-12 mg-top-30 aos-init aos-animate" data-aos="fade-up" data-aos-delay="600">
+                <div class="inflanar-hcard inflanar-hcard--one">
+                    <div class="inflanar-hcard__img">
+                        <img src="{{ asset('img/analysis.png') }}" alt="Analysis">
+                    </div>
+                    <div class="inflanar-hcard__content">
+                        <div class="inflanar-hcard__line inflanar-hcard__line--v2"> </div>
+                        <h4 class="inflanar-hcard__label">
+                            <span>Step</span>
+                            <b>3</b>
+                        </h4>
+                        <h4 class="inflanar-hcard__title">AI Analysis</h4>
+                        <p class="inflanar-hcard__text">Our advanced AI system analyzes your fundus image to detect potential eye conditions with high accuracy and precision.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-12 mg-top-30 aos-init aos-animate" data-aos="fade-up" data-aos-delay="800">
+                <div class="inflanar-hcard inflanar-hcard--two">
+                    <div class="inflanar-hcard__content inflanar-hcard__content__two">
+                        <h4 class="inflanar-hcard__label">
+                            <span>Step</span>
+                            <b>4</b>
+                        </h4>
+                        <h4 class="inflanar-hcard__title">Get Results & Learn</h4>
+                        <p class="inflanar-hcard__text">Receive detailed analysis reports and explore our blog for educational content about eye health and disease prevention.</p>
+                        <div class="inflanar-hcard__line inflanar-hcard__line--v3"> </div>
+                    </div>
+                    <div class="inflanar-hcard__img">
+                        <img src="{{ asset('img/report2.png') }}" alt="Results">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
+<style>
+/* About Section Styles */
+.inflanar-section-shape15 {
+    background: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
 
+.inflanar-section-shape15::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" fill="rgba(96, 75, 176, 0.05)"/></svg>');
+    opacity: 0.1;
+}
 
+/* About Image Styles */
+.about-image-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.about-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(96, 75, 176, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.about-image-container:hover .image-overlay {
+    opacity: 1;
+}
+
+.about-image-container:hover .about-image {
+    transform: scale(1.05);
+}
+
+.overlay-content {
+    text-align: center;
+    color: #fff;
+}
+
+.overlay-content i {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.overlay-content span {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+/* Rest of your existing styles */
+.inflanar-section__title {
+    color: #2C3E50;
+}
+
+.inflanar-section__badge {
+    background: #604BB0;
+    color: #fff;
+}
+
+.inflanar-section__badge i {
+    color: #fff;
+}
+
+.inflanar-list-style {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.inflanar-list-style li {
+    color: #2C3E50;
+}
+
+.inflanar-list-style li i {
+    color: #604BB0;
+}
+
+.button-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.inflanar-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.inflanar-btn-outline {
+    background: transparent;
+    color: #604BB0;
+    border: 2px solid #604BB0;
+}
+
+.inflanar-btn-outline:hover {
+    background: #604BB0;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991px) {
+    .inflanar-list-style {
+        grid-template-columns: 1fr;
+    }
+    
+    .button-group {
+        flex-direction: column;
+    }
+    
+    .inflanar-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .about-image-container {
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .inflanar-section__title {
+        font-size: 28px;
+    }
+    
+    .about-image-container {
+        max-width: 300px;
+        margin-bottom: 30px;
+    }
+}
+
+/* Working Process Section Styles */
+.inflanar-hcard {
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px;
+    height: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.inflanar-hcard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(96, 75, 176, 0.15);
+}
+
+.inflanar-hcard__img {
+    margin-bottom: 20px;
+    border-radius: 15px;
+    overflow: hidden;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+}
+
+.inflanar-hcard__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+    padding: 10px;
+}
+
+.inflanar-hcard:hover .inflanar-hcard__img img {
+    transform: scale(1.05);
+}
+
+.inflanar-hcard__label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    color: #604BB0;
+    font-size: 16px;
+}
+
+.inflanar-hcard__label b {
+    background: #604BB0;
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.inflanar-hcard__title {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #2C3E50;
+}
+
+.inflanar-hcard__text {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.inflanar-hcard__line {
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inflanar-hcard__line img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 0;
+}
+
+.inflanar-hcard--two .inflanar-hcard__content {
+    order: 2;
+}
+
+.inflanar-hcard--two .inflanar-hcard__img {
+    order: 1;
+}
+
+.inflanar-hcard--two .inflanar-hcard__line {
+    right: auto;
+    left: -20px;
+}
+
+@media (max-width: 991px) {
+    .inflanar-hcard__line {
+        display: none;
+    }
+    
+    .inflanar-hcard {
+        margin-bottom: 30px;
+    }
+}
+</style>
  
 
     @include('includes.section')

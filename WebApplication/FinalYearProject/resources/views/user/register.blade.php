@@ -82,7 +82,32 @@
                                     <h4 class="inflanar-signin__title3">Fundus Disease Analysis using Hybrid CNN</h4>
                                 </div>
                             </div>
+                            <div id="successMessage" class="alert alert-success d-none"></div>
 
+                            <!-- Error Message Container -->
+                            <div id="errorContainer" class="d-none"></div>
+                            
+                            <!-- Laravel Flash Messages -->
+                            @if(session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+                            
+                            @if(session('error'))
+                                <div class="alert alert-danger">{{ session('error') }}</div>
+                            @endif
+                            
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            
                             <div class="inflanar-signin__inner">
                                 <form action="{{ route('user.save') }}" method="POST">
                                     @csrf
@@ -182,6 +207,14 @@ document.querySelector('form').addEventListener('submit', function(event) {
     event.preventDefault();
 
     let formData = new FormData(this);
+    let errorContainer = document.getElementById("errorContainer");
+    let successMessage = document.getElementById("successMessage");
+
+    // Clear previous messages
+    errorContainer.innerHTML = "";
+    errorContainer.classList.add("d-none"); // Hide error div initially
+    successMessage.innerText = "";
+    successMessage.classList.add("d-none");
 
     fetch(this.action, {
         method: "POST",
@@ -190,28 +223,33 @@ document.querySelector('form').addEventListener('submit', function(event) {
     })
     .then(response => response.json().then(data => ({ status: response.status, body: data })))
     .then(({ status, body }) => {
-        let otpMessage = document.getElementById("otpMessage");
-        if (status === 422) {
-            otpMessage.classList.add("text-danger");
-            otpMessage.innerText = Object.values(body.errors).flat().join("\n");
+        if (status === 422) {  // Validation error
+            errorContainer.classList.remove("d-none");
+            errorContainer.innerHTML = `
+                <div class="alert alert-danger">
+                    <ul>${Object.values(body.errors).flat().map(error => `<li>${error}</li>`).join("")}</ul>
+                </div>
+            `;
         } else if (body.success) {
+            successMessage.classList.remove("d-none");
+            successMessage.innerText = "OTP sent successfully. Please check your email.";
+
             document.getElementById("otp_email").value = formData.get("email");
-            otpMessage.classList.remove("text-danger");
-            otpMessage.classList.add("text-success");
-            otpMessage.innerText = "OTP sent successfully. Please check your email.";
 
             let otpModal = new bootstrap.Modal(document.getElementById("otpModal"));
             otpModal.show();
         } else {
-            otpMessage.classList.add("text-danger");
-            otpMessage.innerText = body.error || "Something went wrong.";
+            errorContainer.classList.remove("d-none");
+            errorContainer.innerHTML = `<div class="alert alert-danger">${body.error || "Something went wrong."}</div>`;
         }
     })
     .catch(error => {
         console.error("Error:", error);
-        document.getElementById("otpMessage").innerText = "An error occurred. Please try again.";
+        errorContainer.classList.remove("d-none");
+        errorContainer.innerHTML = `<div class="alert alert-danger">An error occurred. Please try again.</div>`;
     });
 });
+
 
 function verifyOtp() {
     let email = document.getElementById("otp_email").value;

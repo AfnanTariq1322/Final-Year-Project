@@ -12,26 +12,21 @@
     <meta name="description" content="Zenix - Crypto Admin Dashboard">
     <meta property="og:title" content="Zenix - Crypto Admin Dashboard">
     <meta property="og:description" content="Zenix - Crypto Admin Dashboard">
-    <meta property="og:image" content="https://zenix.0dexignzone.com/xhtml/social-image.png">
+    <meta property="og:image" content="https://zenix.dexignzone.com/xhtml/social-image.png">
     <meta name="format-detection" content="telephone=no">
-    <title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-        Admin Dashboard </title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-        integqwAY16o6hkjmNffHZxUOqjiv6IfgFt1TnHGOF67Fw7RWx99I66NHTbLrPIEJQ6RglaL+GSDcz0Xl1zHTA=="
-   crossorigin=" anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <head>
+        <title>Admin Dashboard</title>
+        <!-- Favicon icon -->
+        <link rel="icon" type="image/png" href="{{ asset('storage/downloads/appicon.png') }}">
+    </head>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
-        integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="shortcut icon" type="image/x-icon" href="/assets/img/logo/favicon.png">
-    <link rel="stylesheet" href="/vendor/chartist/css/chartist.min.css">
-    <link hr/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
-    <link hvendor/owl-carousel/owl.carousel.css" rel="stylesheet">
-    <link href="/css/style.css" rel="stylesheet">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="../AdminTemplate/vendor/chartist/css/chartist.min.css">
+    <link href="../AdminTemplate/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="../AdminTemplate/vendor/owl-carousel/owl.carousel.css" rel="stylesheet">
+    <link href="../AdminTemplate/css/style.css" rel="stylesheet">
+
 </head>
 
 <body>
@@ -839,28 +834,23 @@
     ***********************************-->
                 <!-- Required vendors -->
 
-                <script src="/vendor/global/global.min.js"></script>
-                <script src="/vendor/bootstrap-select/dist/js/bootstrap-select.min.js">
-                </script>
-                <script src="/vendor/chart.js/Chart.bundle.min.js"></script>
+                <script src="../AdminTemplate/vendor/global/global.min.js"></script>
+        <script src="../AdminTemplate/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+        <script src="../AdminTemplate/vendor/chart.js/Chart.bundle.min.js"></script>
 
-                <!-- Chart piety plugin files -->
-                <script src="/vendor/peity/jquery.peity.min.js"></script>
+        <!-- Chart piety plugin files -->
+        <script src="../AdminTemplate/vendor/peity/jquery.peity.min.js"></script>
 
-                <!-- Apex Chart -->
-                <script src="/vendor/apexchart/apexchart.js"></script>
+        <!-- Apex Chart -->
+        <script src="../AdminTemplate/vendor/apexchart/apexchart.js"></script>
 
-                <!-- Dashboard 1 -->
-                <script src="/js/dashboard/dashboard-1.js"></script>
+        <!-- Dashboard 1 -->
+        <script src="../AdminTemplate/js/dashboard/dashboard-1.js"></script>
 
-                <script src="/vendor/owl-carousel/owl.carousel.js"></script>
-                <script src="/js/custom.min.js"></script>
-                <script src="/js/deznav-init.js"></script>
-                <script src="/js/demo.js"></script>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
-                    integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
-                    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script src="../AdminTemplate/vendor/owl-carousel/owl.carousel.js"></script>
+        <script src="../AdminTemplate/js/custom.min.js"></script>
+        <script src="../AdminTemplate/js/deznav-init.js"></script>
+        <script src="../AdminTemplate/js/demo.js"></script>
 
 </body>
 

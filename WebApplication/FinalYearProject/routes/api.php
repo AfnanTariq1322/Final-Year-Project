@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\BlogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,10 +28,14 @@ Route::post('/verify-otp', [UserController::class, 'verifyOtp']);
 Route::post('/resend-otp', [UserController::class, 'resendOtp']);
 Route::post('/send-reset-link', [UserController::class, 'sendResetLink']);
 
-
+ Route::get('/profile', [UserController::class, 'getProfile']);
+    Route::post('/profile/update', [UserController::class, 'updateProfile']);
 
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout']);
 Route::post('/refresh', [UserController::class, 'refresh']); 
 Route::get('/me', [UserController::class, 'me']);
 Route::get('/dashboard', [UserController::class, 'dashboard']); 
+Route::get('/blogs-categories', [BlogController::class, 'getBlogsAndCategories']);
+Route::post('/blog/{blog_id}/comment', [BlogController::class, 'storeComment']);
+Route::get('/blog/{id}', [BlogController::class, 'getBlogDetail']);
