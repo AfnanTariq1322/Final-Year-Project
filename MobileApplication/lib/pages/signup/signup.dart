@@ -1,13 +1,11 @@
-// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api, prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: unnecessary_import, library_private_types_in_public_api, prefer_const_constructors, avoid_print, use_build_context_synchronously
 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:eye_disease_detection_app/pages/login/login.dart';
-import 'package:eye_disease_detection_app/pages/signup/patient_profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // Firebase Auth
-//import 'package:lottie/lottie.dart'; // For animated green checkmark
-import '../../app_style.dart'; // Assuming you have a custom style defined in your app_style.dart
+import '../../app_style.dart';
 
 class Signup extends StatefulWidget {
   static String id = "/signup";
@@ -18,81 +16,132 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+  final TextEditingController _otpController = TextEditingController();
+  bool isOtpFieldVisible = false;
 
-  // Sign up method
-  Future<void> _signup() async {
-    if (_passwordController.text != _confirmPasswordController.text) {
+  Future<void> registerUser() async {
+    if (_nameController.text.isEmpty ||
+        _emailController.text.isEmpty ||
+        _passwordController.text.isEmpty ||
+        _confirmPasswordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match')),
+        SnackBar(content: Text("Please fill all fields!")),
       );
       return;
     }
-    try {
-      UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-      if (userCredential.user != null) {
-        // Show the success dialog with animation
-        _showSuccessDialog();
 
-        // Navigate to PatientProfile screen after 2 seconds delay
-        await Future.delayed(const Duration(seconds: 3));
-        Navigator.of(context).pushNamed(PatientProfile.id);
+    try {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:8000/api/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "name": _nameController.text.trim(),
+          "email": _emailController.text.trim().toLowerCase(),
+          "password": _passwordController.text,
+          "confirm_password": _confirmPasswordController.text,
+        }),
+      );
+
+      print("Register Response Code: ${response.statusCode}");
+      print("Register Response Body: ${response.body}");
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text("Registration Successful! Please verify OTP.")),
+        );
+        setState(() {
+          isOtpFieldVisible = true;
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(responseData['message'] ?? "Registration Failed!")),
+        );
       }
     } catch (e) {
-      // Handle signup errors
+      print("Error: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Signup failed: ${e.toString()}')),
+        SnackBar(content: Text("Something went wrong! Please try again.")),
       );
     }
   }
 
-  // Show the success dialog with green checkmark
-  void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible:
-          false, // User cannot dismiss the dialog by tapping outside
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Green checkmark icon
-                Icon(
-                  Icons.check_circle, // Green checkmark icon
-                  color: Colors.green,
-                  size: 100,
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Account has been created successfully!',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 20),
-              ],
-            ),
-          ),
+  Future<void> verifyOtp() async {
+    print("Entered OTP: ${_otpController.text}");
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:8000/api/verify-otp'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "email": _emailController.text.trim().toLowerCase(),
+          "otp": _otpController.text.trim(),
+        }),
+      );
+
+      print("OTP Verify Response Code: ${response.statusCode}");
+      print("OTP Verify Response Body: ${response.body}");
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("OTP Verified! You can now log in.")),
         );
-      },
-    );
+        Navigator.of(context).pushNamed(Login.id);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(
+                  responseData['message'] ?? "Invalid OTP! Please try again.")),
+        );
+      }
+    } catch (e) {
+      print("Error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Something went wrong! Please try again.")),
+      );
+    }
+  }
+
+  Future<void> resendOtp() async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:8000/api/resend-otp'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({"email": _emailController.text.trim().toLowerCase()}),
+      );
+
+      print("Resend OTP Response Code: ${response.statusCode}");
+      print("Resend OTP Response Body: ${response.body}");
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content:
+                  Text(responseData['message'] ?? "OTP Resent Successfully!")),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to resend OTP!")),
+        );
+      }
+    } catch (e) {
+      print("Error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Something went wrong! Please try again.")),
+      );
+    }
   }
 
   @override
@@ -121,81 +170,65 @@ class _SignupState extends State<Signup> {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 SizedBox(height: size.height * 0.018),
-                Text(
-                  "Create a new account",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall!
-                      .copyWith(fontSize: 15),
-                ),
-                SizedBox(height: size.height * 0.020),
                 TextField(
-                  controller: _emailController, // Email Controller
-                  style: const TextStyle(color: kLightTextColor),
+                  controller: _nameController,
                   decoration: InputDecoration(
-                    hintText: "Email",
-                    prefixIcon: IconButton(
-                      onPressed: null,
-                      icon: SvgPicture.asset(emailIcon),
-                    ),
-                  ),
+                      hintText: "Name", prefixIcon: Icon(Icons.person)),
                 ),
                 SizedBox(height: size.height * 0.016),
                 TextField(
-                  controller: _passwordController, // Password Controller
-                  obscureText: true,
-                  style: const TextStyle(color: kLightTextColor),
+                  controller: _emailController,
                   decoration: InputDecoration(
-                    hintText: "Password",
-                    prefixIcon: IconButton(
-                      onPressed: null,
-                      icon: SvgPicture.asset(lockIcon),
-                    ),
-                  ),
+                      hintText: "Email", prefixIcon: Icon(Icons.email)),
                 ),
                 SizedBox(height: size.height * 0.016),
                 TextField(
-                  controller:
-                      _confirmPasswordController, // Confirm Password Controller
+                  controller: _passwordController,
                   obscureText: true,
-                  style: const TextStyle(color: kLightTextColor),
                   decoration: InputDecoration(
-                    hintText: "Confirm Password",
-                    prefixIcon: IconButton(
-                      onPressed: null,
-                      icon: SvgPicture.asset(lockIcon),
-                    ),
-                  ),
+                      hintText: "Password", prefixIcon: Icon(Icons.lock)),
+                ),
+                SizedBox(height: size.height * 0.016),
+                TextField(
+                  controller: _confirmPasswordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                      hintText: "Confirm Password",
+                      prefixIcon: Icon(Icons.lock)),
                 ),
                 SizedBox(height: size.height * 0.025),
                 ElevatedButton(
-                  onPressed: _signup, // Signup action
-                  child: Text(
-                    "Sign Up",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
+                  onPressed: registerUser,
+                  child: Text("Sign Up"),
                 ),
+                if (isOtpFieldVisible) ...[
+                  SizedBox(height: size.height * 0.016),
+                  TextField(
+                    controller: _otpController,
+                    decoration: InputDecoration(
+                        hintText: "Enter OTP",
+                        prefixIcon: Icon(Icons.verified)),
+                  ),
+                  SizedBox(height: size.height * 0.016),
+                  ElevatedButton(
+                    onPressed: verifyOtp,
+                    child: Text("Verify OTP"),
+                  ),
+                  TextButton(
+                    onPressed: resendOtp,
+                    child: Text("Resend OTP"),
+                  ),
+                ],
                 SizedBox(height: size.height * 0.041),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "Already a member?\t",
-                      style: Theme.of(context).textTheme.titleSmall,
+                    Text("Already a member? "),
+                    TextButton(
+                      onPressed: () =>
+                          Navigator.of(context).pushNamed(Login.id),
+                      child: Text("Log In"),
                     ),
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(Login.id);
-                      },
-                      child: Text(
-                        "Log In",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleSmall!
-                            .copyWith(color: kTextColor),
-                      ),
-                    )
                   ],
                 ),
               ],
