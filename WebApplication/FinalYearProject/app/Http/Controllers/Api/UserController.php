@@ -19,15 +19,14 @@ use App\Models\Blog;
   use Illuminate\Support\Str;
 class UserController extends Controller
 {
-
-    private function sendEmailViaBrevo($email, $name, $otp)
+    private function sendRegistrationEmail($email, $name, $otp)
     {
-    $apiKey = "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";
-    
+        $apiKey = "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";
+        
         $data = [
             "sender" => [
                 "name" => "Fundus Image Analysis",
-                "email" => "afnantariq715@gmail.com" // Must be a verified sender in Brevo
+                "email" => "web450937@gmail.com" // Must be a verified sender in Brevo
             ],
             "to" => [
                 [
@@ -38,7 +37,34 @@ class UserController extends Controller
             "subject" => "Verify Your Email",
             "htmlContent" => "<html><body><h1>Email Verification</h1><p>Your OTP is: <strong>{$otp}</strong></p><p>It is valid for 10 minutes.</p></body></html>"
         ];
-    
+        
+        $this->sendEmail($data, $apiKey);
+    }
+
+    private function sendResendOtpEmail($email, $name, $otp)
+    {
+        $apiKey = "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";
+        
+        $data = [
+            "sender" => [
+                "name" => "Fundus Image Analysis",
+                "email" => "web450937@gmail.com" // Must be a verified sender in Brevo
+            ],
+            "to" => [
+                [
+                    "name" => $name,
+                    "email" => $email
+                ]
+            ],
+            "subject" => "Resend OTP",
+            "htmlContent" => "<html><body><h1>Resend OTP</h1><p>Your new OTP is: <strong>{$otp}</strong></p><p>It is valid for 10 minutes.</p></body></html>"
+        ];
+        
+        $this->sendEmail($data, $apiKey);
+    }
+
+    private function sendEmail($data, $apiKey)
+    {
         $jsonData = json_encode($data);
     
         if (json_last_error() !== JSON_ERROR_NONE) {
@@ -105,14 +131,13 @@ class UserController extends Controller
         ]);
 
         // Send OTP via Brevo API
-        $this->sendEmailViaBrevo($request->email, $request->name, $otp);
+        $this->sendRegistrationEmail($request->email, $request->name, $otp);
 
         return response()->json([
             'success' => true,
             'message' => 'Registration successful. Please verify your OTP.'
         ]);
     }
-
 
 
     public function verifyOtp(Request $request)
@@ -191,8 +216,11 @@ class UserController extends Controller
             'otp_expires_at' => now()->addMinutes(10),
         ]);
     
+        // Log the OTP generation
+        Log::info("Generated new OTP for user: {$user->email}, OTP: {$otp}");
+    
         // ✅ Send email with new OTP
-        $this->sendEmailViaBrevo($request->email, $user->name, $otp);
+        $this->sendResendOtpEmail($request->email, $user->name, $otp);
     
         return response()->json([
             'success' => true,
@@ -295,10 +323,18 @@ class UserController extends Controller
                 if (!$user) {
                     return response()->json(['success' => false, 'error' => 'User not found'], 404);
                 }
-        
+    
+                // Convert the user to an array
+                $userData = $user->toArray();
+                
+                // If image exists, create the full URL with the correct IP for Android emulator
+                if (!empty($userData['image'])) {
+                    $userData['image_url'] = 'http://10.0.2.2:8000/storage/' . $userData['image'];
+                }
+    
                 return response()->json([
                     'success' => true,
-                    'user' => $user // Returns all user data dynamically
+                    'user' => $userData
                 ]);
         
             } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
@@ -309,7 +345,6 @@ class UserController extends Controller
                 return response()->json(['success' => false, 'error' => 'Token error: ' . $e->getMessage()], 401);
             }
         }
-        
     
         public function updateProfile(Request $request)
         {

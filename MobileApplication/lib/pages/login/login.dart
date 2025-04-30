@@ -1,13 +1,19 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, prefer_const_declarations, unused_import, avoid_print
 
+import 'dart:convert';
 import 'package:eye_disease_detection_app/app_style.dart';
+import 'package:eye_disease_detection_app/constants/constants.dart';
+import 'package:eye_disease_detection_app/functions/global_functions.dart';
+import 'package:eye_disease_detection_app/pages/home_page/home_page.dart';
 import 'package:eye_disease_detection_app/pages/signup/patient_profile.dart';
 import 'package:eye_disease_detection_app/pages/signup/signup.dart';
+import 'package:eye_disease_detection_app/pages/login/ResetPassword.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // Firebase Auth
-import 'package:shared_preferences/shared_preferences.dart'; // SharedPreferences
+import 'package:shared_preferences/shared_preferences.dart';
+import "dart:developer" as developer;
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   static String id = "/login";
@@ -18,11 +24,11 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   bool check = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -30,81 +36,85 @@ class _LoginState extends State<Login> {
     _loadSavedCredentials();
   }
 
-  // Load saved credentials if available
   Future<void> _loadSavedCredentials() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? savedEmail = prefs.getString('savedEmail');
     String? savedPassword = prefs.getString('savedPassword');
 
-    if (savedEmail != null && savedPassword != null) {
+    if (savedPassword != null) {
       setState(() {
-        _emailController.text = savedEmail;
+        _emailController.text = savedEmail!;
         _passwordController.text = savedPassword;
-        check =
-            true; // Automatically check "Remember me" if credentials are saved
+        check = true;
       });
     }
   }
 
-  // Save credentials
   Future<void> _saveCredentials() async {
     if (check) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('savedEmail', _emailController.text.trim());
       await prefs.setString('savedPassword', _passwordController.text.trim());
     } else {
-      _clearCredentials(); // Clear saved credentials if checkbox is unchecked
+      _clearCredentials();
     }
   }
 
-  // Clear saved credentials
   Future<void> _clearCredentials() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('savedEmail');
     await prefs.remove('savedPassword');
   }
 
-  // Login method
   Future<void> _login() async {
-    try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-      if (userCredential.user != null) {
-        await _saveCredentials(); // Save credentials after successful login
-        // Navigate to PatientProfile
-        Navigator.of(context).pushNamed(PatientProfile.id);
-      }
-    } catch (e) {
-      // Handle login errors
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login failed: ${e.toString()}')),
-      );
-    }
-  }
-
-  // Function to reset password
-  Future<void> _resetPassword() async {
-    String email = _emailController.text.trim();
-
-    if (email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text('Please enter your email to reset your password.')),
+        SnackBar(content: Text("Please fill in all fields!")),
       );
       return;
     }
 
+    setState(() => _isLoading = true);
+
     try {
-      await _auth.sendPasswordResetEmail(email: email);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Password reset email has been sent!')),
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:8000/api/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "email": _emailController.text.trim().toLowerCase(),
+          "password": _passwordController.text,
+        }),
       );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        if (responseData['success'] == true) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('auth_token', responseData['token']);
+          await _saveCredentials();
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Login Successful!"), backgroundColor: Colors.green),
+          );
+    GlobalFunctions().nextScreenPushRemoveUntil(context, HomePage());
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(responseData['error'] ?? "Invalid credentials!"), backgroundColor: Colors.red),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(responseData['error'] ?? "Login failed!"), backgroundColor: Colors.red),
+        );
+      }
     } catch (e) {
+      print("Error: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to send reset email: ${e.toString()}')),
+        SnackBar(content: Text("Something went wrong! Please try again."), backgroundColor: Colors.red),
       );
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
@@ -112,13 +122,11 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Color(0xFF6A1B9A), // Darker purple
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: size.width * 0.1,
-              vertical: size.height * 0.035,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.1, vertical: size.height * 0.035),
             child: Column(
               children: [
                 Align(
@@ -131,52 +139,64 @@ class _LoginState extends State<Login> {
                 SizedBox(height: size.height * 0.023),
                 Text(
                   "Eye Disease App",
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 SizedBox(height: size.height * 0.018),
                 Text(
                   "Sign in to Continue",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall!
-                      .copyWith(fontSize: 15),
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        fontSize: 15,
+                        color: Colors.white70,
+                      ),
                 ),
                 SizedBox(height: size.height * 0.020),
                 TextField(
-                  controller: _emailController, // Email Controller
-                  style: const TextStyle(color: kLightTextColor),
+                  controller: _emailController,
+                  style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     hintText: "Email",
-                    prefixIcon: IconButton(
-                      onPressed: null,
-                      icon: SvgPicture.asset(userIcon),
+                    hintStyle: TextStyle(color: Colors.white70),
+                    prefixIcon: Icon(Icons.email, color: Colors.white),
+                    filled: true,
+                    fillColor: Color(0xFF8E24AA),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12),
                     ),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                   ),
                 ),
                 SizedBox(height: size.height * 0.016),
                 TextField(
-                  controller: _passwordController, // Password Controller
+                  controller: _passwordController,
                   obscureText: true,
-                  style: const TextStyle(color: kLightTextColor),
+                  style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     hintText: "Password",
-                    prefixIcon: IconButton(
-                      onPressed: null,
-                      icon: SvgPicture.asset(lockIcon),
+                    hintStyle: TextStyle(color: Colors.white70),
+                    prefixIcon: Icon(Icons.lock, color: Colors.white),
+                    filled: true,
+                    fillColor: Color(0xFF8E24AA),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12),
                     ),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                   ),
                 ),
                 SizedBox(height: size.height * 0.021),
                 Align(
                   alignment: Alignment.centerRight,
                   child: GestureDetector(
-                    onTap: _resetPassword, // Call the password reset function
+                    onTap: () {
+                      Navigator.of(context).pushNamed(ResetPassword.id);
+                    },
                     child: Text(
                       "Forgot Password?",
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall!
-                          .copyWith(color: kTextColor),
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
@@ -184,25 +204,41 @@ class _LoginState extends State<Login> {
                   children: [
                     Checkbox(
                       value: check,
-                      activeColor: kLightTextColor,
+                      activeColor: Colors.white,
+                      checkColor: Color(0xFF6A1B9A),
                       onChanged: (bool? value) {
-                        setState(() {
-                          check = value!;
-                        });
+                        setState(() => check = value!);
                       },
                     ),
-                    Text(
-                      "Remember me and keep me logged in",
-                      style: Theme.of(context).textTheme.titleSmall,
+                    Expanded(
+                      child: Text(
+                        "Remember me and keep me logged in",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ],
                 ),
                 SizedBox(height: size.height * 0.029),
-                ElevatedButton(
-                  onPressed: _login, // Login action
-                  child: Text(
+                SizedBox(
+                  width: double.infinity,
+                  height: 55,
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : _login,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      elevation: 5,
+                    ),
+                    child: _isLoading
+                        ? CircularProgressIndicator(color: Color(0xFF6A1B9A))
+                        : Text(
                     "Sign in",
-                    style: Theme.of(context).textTheme.titleMedium,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF6A1B9A),
+                            ),
+                          ),
                   ),
                 ),
                 SizedBox(height: size.height * 0.041),
@@ -211,7 +247,7 @@ class _LoginState extends State<Login> {
                   children: [
                     Text(
                       "Not a member yet?\t",
-                      style: Theme.of(context).textTheme.titleSmall,
+                      style: TextStyle(color: Colors.white),
                     ),
                     CupertinoButton(
                       padding: EdgeInsets.zero,
@@ -220,10 +256,11 @@ class _LoginState extends State<Login> {
                       },
                       child: Text(
                         "Sign Up",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleSmall!
-                            .copyWith(color: kTextColor),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                        ),
                       ),
                     )
                   ],

@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, file_names
+// ignore_for_file: use_build_context_synchronously, file_names, prefer_const_constructors
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,12 @@ class ResetPassword extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Reset Password'),
+        backgroundColor: Colors.deepPurple,
+        title: const Text(
+          'Reset Password',
+          style: TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -23,6 +28,7 @@ class ResetPassword extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.0),
             ),
+            color: Colors.deepPurple.shade50,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -33,16 +39,22 @@ class ResetPassword extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      color: Colors.deepPurple,
                     ),
                   ),
                   const SizedBox(height: 20),
                   TextField(
                     controller: _emailController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Enter your email',
                       hintText: 'Email',
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.deepPurple),
+                      ),
+                      labelStyle: const TextStyle(color: Colors.deepPurple),
                     ),
+                    cursorColor: Colors.deepPurple,
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
@@ -71,7 +83,7 @@ class ResetPassword extends StatelessWidget {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue, // Button background color
+                      backgroundColor: Colors.deepPurple, // Purple background
                       padding: const EdgeInsets.symmetric(
                         vertical: 12.0,
                         horizontal: 20.0,
@@ -82,7 +94,7 @@ class ResetPassword extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white, // Text color
-                        fontSize: 16, // Optional: Adjust text size
+                        fontSize: 16,
                       ),
                     ),
                   ),
