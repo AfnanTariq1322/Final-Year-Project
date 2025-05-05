@@ -117,7 +117,7 @@
                                         class="user-image"
                                         style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ccc; margin-right: 10px;">
                                 @else
-                                    <img src="{{ asset('path/to/default/image.png') }}" alt="Default Image"
+                                    <img src="{{ asset('path/to/default/image.png') }}" alt="     "
                                         class="user-image"
                                         style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ccc; margin-right: 10px;">
                                 @endif
@@ -157,12 +157,35 @@
                                     <div class="navbar">
                                         <div class="nav-item">
                                             <ul class="nav-menu menu navigation list-none">
-                                                <li class="active"><a href="/home">Home</a>
+                                                <li class="{{ request()->routeIs('home') ? 'active' : '' }}">
+                                                    <a href="{{ route('home') }}" class="menu-blogs">Home</a>
                                                 </li>
-                                                <li><a href="/about">About</a></li>
-                                                <li><a href="/blogs">Our Blogs</a></li>
-                                                <li><a href="">Diseases</a></li>
-                                                <li><a href="">Contact Us</a></li>
+                                                <li
+                                                    class="{{ request()->routeIs('about') || request()->routeIs('about') ? 'active' : '' }}">
+                                                    <a href="{{ route('about') }}" class="menu-blogs">About</a>
+                                                </li>
+    
+                                                <li
+                                                    class="{{ request()->routeIs('blogs') || request()->routeIs('blogdetail') ? 'active' : '' }}">
+                                                    <a href="{{ route('blogs') }}" class="menu-blogs">Our Blogs</a>
+                                                </li>
+    
+                                                <li
+                                                    class="{{ request()->routeIs('diagnosis') || request()->routeIs('diagnosis') ? 'active' : '' }}">
+                                                    <a href="{{ route('diagnosis') }}" class="menu-blogs">Diagnosis</a>
+                                                </li>
+    
+    
+                                                <!-- 🆕 Doctors Menu -->
+                                                <li class="{{ request()->routeIs('doctors') ? 'active' : '' }}">
+                                                    <a href="{{ route('doctors') }}" class="menu-blogs">Doctors</a>
+                                                </li>
+    
+    
+                                                <li
+                                                    class="{{ request()->routeIs('contact') || request()->routeIs('contact') ? 'active' : '' }}">
+                                                    <a href="{{ route('contact') }}" class="menu-blogs">Contact Us</a>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -253,33 +276,20 @@
                     <div class="col-lg-9 col-md-8 col-12  inflanar-personals__content">
                                            <!-- Stats Cards -->
                     <div class="row">
-                        <div class="col-lg-4 col-md-6 col-12 mg-top-30">
+                        <div class="col-lg-6 col-md-6 col-12 mg-top-30">
                             <div class="inflanar-pdbox">
                                 <div class="inflanar-pdbox__icon">
-                                    <i class="fas fa-camera-retro fa-2x"></i>
+                                    <i class="fas fa-calendar-check fa-2x"></i>
                                 </div>
                                 <div class="inflanar-pdbox__content">
                                     <h4 class="inflanar-pdbox__title">
-                                        <span>Total Fundus Images</span>
-                                        <strong>{{ $LoggedUserInfo->fundus_images_count ?? '0' }}</strong>
+                                        <span>Total Appointments</span>
+                                        <strong>{{ $totalAppointments ?? '0' }}</strong>
                                     </h4>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-12 mg-top-30">
-                            <div class="inflanar-pdbox inflanar-pdbox__2">
-                                <div class="inflanar-pdbox__icon">
-                                    <i class="fas fa-exclamation-triangle fa-2x"></i>
-                                </div>
-                                <div class="inflanar-pdbox__content">
-                                    <h4 class="inflanar-pdbox__title">
-                                        <span>Acute Cases Detected</span>
-                                        <strong>{{ $LoggedUserInfo->acute_cases_count ?? '0' }}</strong>
-                                    </h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-12 mg-top-30">
+                        <div class="col-lg-6 col-md-6 col-12 mg-top-30">
                             <div class="inflanar-pdbox inflanar-pdbox__3">
                                 <div class="inflanar-pdbox__icon">
                                     <i class="fas fa-chart-line fa-2x"></i>
@@ -287,7 +297,7 @@
                                 <div class="inflanar-pdbox__content">
                                     <h4 class="inflanar-pdbox__title">
                                         <span>Latest Classification</span>
-                                        <strong>{{ $LoggedUserInfo->latest_classification ?? 'No Data' }}</strong>
+                                        <strong>{{ $latestPrediction ?? 'No Data' }}</strong>
                                     </h4>
                                 </div>
                             </div>
@@ -466,11 +476,20 @@
                                                     <label>Symptoms</label>
                                                     <div class="symptoms-list">
                                                         @php
-                                                            $symptomsArray = explode(',', $LoggedUserInfo->symptoms);
+                                                            $symptoms = $LoggedUserInfo->symptoms;
+                                                            if (is_string($symptoms)) {
+                                                                $symptomsArray = explode(',', $symptoms);
+                                                            } elseif (is_array($symptoms)) {
+                                                                $symptomsArray = $symptoms;
+                                                            } else {
+                                                                $symptomsArray = [];
+                                                            }
                                                         @endphp
-                                                        @foreach ($symptomsArray as $symptom)
+                                                        @forelse ($symptomsArray as $symptom)
                                                             <span class="symptom-tag">{{ trim($symptom) }}</span>
-                                                        @endforeach
+                                                        @empty
+                                                            <span class="symptom-tag">No symptoms recorded</span>
+                                                        @endforelse
                                                     </div>
                                                 </div>
                                             </div>

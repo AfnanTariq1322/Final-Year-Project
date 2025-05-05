@@ -133,42 +133,53 @@
                                 <div class="results-header">
                                     <h3>Analysis Results</h3>
                                     <div class="severity-indicator">
-                                        <span class="severity-label">Severity Level:</span>
-                                        <span class="severity-value" id="severityValue">Moderate</span>
+                                        <span class="severity-label">Confidence Level:</span>
+                                        <span class="severity-value" id="severityValue">N/A</span>
                                     </div>
                                 </div>
                                 
                                 <div class="results-content">
                                     <div class="diagnosis-card">
                                         <h4>Detected Condition</h4>
-                                        <p id="detectedCondition">Diabetic Retinopathy</p>
+                                        <p id="detectedCondition">N/A</p>
                                     </div>
                                     
                                     <div class="details-grid">
                                         <div class="detail-item">
                                             <i class="fas fa-percentage"></i>
                                             <h5>Confidence Level</h5>
-                                            <p id="confidenceLevel">95%</p>
+                                            <p id="confidenceLevel">N/A</p>
                                         </div>
                                         <div class="detail-item">
                                             <i class="fas fa-clock"></i>
                                             <h5>Analysis Time</h5>
-                                            <p id="analysisTime">2.5 seconds</p>
+                                            <p id="analysisTime">N/A</p>
                                         </div>
                                         <div class="detail-item">
                                             <i class="fas fa-calendar-check"></i>
                                             <h5>Date</h5>
-                                            <p id="analysisDate">March 15, 2024</p>
+                                            <p id="analysisDate">N/A</p>
                                         </div>
                                     </div>
     
                                     <div class="recommendations">
                                         <h4>Recommendations</h4>
-                                        <ul id="recommendationsList">
-                                            <li>Schedule an appointment with an ophthalmologist</li>
-                                            <li>Monitor blood sugar levels regularly</li>
-                                            <li>Maintain a healthy diet and exercise routine</li>
-                                        </ul>
+                                        <ul id="recommendationsList"></ul>
+                                    </div>
+
+                                    <div class="clinical-notes">
+                                        <h4>Clinical Notes</h4>
+                                        <ul id="clinicalNotesList"></ul>
+                                    </div>
+
+                                    <div class="conditions-list">
+                                        <h4>Detected Conditions</h4>
+                                        <ul id="conditionsList"></ul>
+                                    </div>
+
+                                    <div class="tips-and-relief">
+                                        <h4>Tips & Relief Suggestions</h4>
+                                        <div id="tipsAndRelief" class="tips-content"></div>
                                     </div>
     
                                     <div class="disclaimer">
@@ -180,8 +191,8 @@
                                         <button class="btn btn-primary" id="downloadPDF">
                                             <i class="fas fa-download"></i> Download PDF Report
                                         </button>
-                                        <button class="btn btn-secondary" id="shareReport">
-                                            <i class="fas fa-share-alt"></i> Share Report
+                                        <button class="btn btn-secondary" id="tryAgain">
+                                            <i class="fas fa-redo"></i> Try Analysis Again
                                         </button>
                                     </div>
                                 </div>
@@ -420,8 +431,8 @@
         padding: 5px 15px;
         border-radius: 15px;
         font-weight: 500;
-        background: rgba(255, 87, 87, 0.1);
-        color: #ff5757;
+        background: rgba(96, 75, 176, 0.1);
+        color: #604BB0;
     }
     
     .diagnosis-card {
@@ -438,7 +449,7 @@
     }
     
     .diagnosis-card p {
-        color: #333;
+        color: #604BB0;
         font-size: 24px;
         font-weight: 600;
         margin: 0;
@@ -470,7 +481,7 @@
     }
     
     .detail-item p {
-        color: #333;
+        color: #604BB0;
         font-weight: 600;
         margin: 0;
     }
@@ -700,6 +711,220 @@
     .login-btn:hover span {
         color: #fff;
     }
+
+    /* Add these new styles */
+    .clinical-notes {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+
+    .clinical-notes h4 {
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .clinical-notes ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .clinical-notes li {
+        color: #666;
+        margin-bottom: 10px;
+        padding-left: 25px;
+        position: relative;
+    }
+
+    .clinical-notes li::before {
+        content: '•';
+        color: #604BB0;
+        position: absolute;
+        left: 0;
+    }
+
+    .conditions-list {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+
+    .conditions-list h4 {
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .conditions-list ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .conditions-list li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 15px;
+        background: white;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .conditions-list li:hover {
+        transform: translateX(5px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .confidence-badge {
+        background: rgba(96, 75, 176, 0.1);
+        color: #604BB0;
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    /* Update tips and relief styles */
+    .tips-and-relief {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+
+    .tips-and-relief h4 {
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 1.2rem;
+    }
+
+    .tips-content {
+        color: #666;
+        line-height: 1.6;
+    }
+
+    .tips-content h5 {
+        color: #604BB0;
+        margin: 20px 0 10px;
+        font-size: 1.1rem;
+    }
+
+    .tips-content ul {
+        list-style: none;
+        padding-left: 20px;
+        margin: 10px 0;
+    }
+
+    .tips-content ul li {
+        position: relative;
+        padding-left: 20px;
+        margin-bottom: 8px;
+    }
+
+    .tips-content ul li::before {
+        content: '•';
+        color: #604BB0;
+        position: absolute;
+        left: 0;
+    }
+
+    .tips-content p {
+        margin: 10px 0;
+    }
+
+    /* Update animation styles */
+    .analysis-steps {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 40px;
+        position: relative;
+    }
+
+    .step {
+        text-align: center;
+        flex: 1;
+        position: relative;
+        padding: 0 15px;
+        opacity: 0.5;
+        transition: all 0.5s ease;
+    }
+
+    .step.active {
+        opacity: 1;
+        transform: translateY(-5px);
+    }
+
+    .step i {
+        width: 50px;
+        height: 50px;
+        background: #f8f9fa;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 10px;
+        color: #999;
+        position: relative;
+        z-index: 2;
+        transition: all 0.5s ease;
+    }
+
+    .step.active i {
+        background: #604BB0;
+        color: #fff;
+        transform: scale(1.1);
+        box-shadow: 0 0 15px rgba(96, 75, 176, 0.3);
+    }
+
+    .step span {
+        display: block;
+        font-size: 14px;
+        color: #666;
+        transition: all 0.5s ease;
+    }
+
+    .step.active span {
+        color: #604BB0;
+        font-weight: 500;
+    }
+
+    .progress-bar {
+        height: 6px;
+        background: #eee;
+        border-radius: 3px;
+        margin-top: 20px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .progress {
+        height: 100%;
+        background: #604BB0;
+        width: 0;
+        transition: width 0.5s ease;
+        position: relative;
+    }
+
+    .progress::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
     </style>
     
     @if(isset($LoggedUserInfo))
@@ -712,6 +937,29 @@
         const resultsSection = document.getElementById('resultsSection');
         const analysisProgress = document.getElementById('analysisProgress');
         const steps = document.querySelectorAll('.step');
+    
+        // Create form element
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '{{ route("user.analyze.fundus") }}';
+        form.enctype = 'multipart/form-data';
+        form.style.display = 'none';
+        document.body.appendChild(form);
+    
+        // Add CSRF token
+        const csrfToken = document.createElement('input');
+        csrfToken.type = 'hidden';
+        csrfToken.name = '_token';
+        csrfToken.value = '{{ csrf_token() }}';
+        form.appendChild(csrfToken);
+    
+        // Add file input
+        const formFileInput = document.createElement('input');
+        formFileInput.type = 'file';
+        formFileInput.name = 'fundus_image';
+        formFileInput.id = 'formFileInput';
+        formFileInput.accept = 'image/*';
+        form.appendChild(formFileInput);
     
         // Drag and Drop handlers
         dropZone.addEventListener('dragover', (e) => {
@@ -743,61 +991,362 @@
             // Show preview
             const reader = new FileReader();
             reader.onload = (e) => {
-                // Start analysis animation
-                startAnalysis();
+                // Start analysis
+                startAnalysis(file);
             };
             reader.readAsDataURL(file);
         }
     
-        function startAnalysis() {
+        function startAnalysis(file) {
             uploadContainer.style.display = 'none';
             analysisSection.style.display = 'block';
             resultsSection.style.display = 'none';
     
+            // Reset steps
+            document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+            document.querySelector('.step').classList.add('active');
+
+            // Create FormData object
+            const formData = new FormData();
+            formData.append('fundus_image', file);
+            formData.append('_token', csrfToken.value);
+
+            // Show loading animation
             let progress = 0;
             let currentStep = 0;
+            const steps = document.querySelectorAll('.step');
+            const totalSteps = steps.length;
+            const stepDuration = 2000; // 2 seconds per step
     
-            const interval = setInterval(() => {
+            const progressInterval = setInterval(() => {
                 progress += 1;
+                if (progress > 100) {
+                    clearInterval(progressInterval);
+                    return;
+                }
                 analysisProgress.style.width = `${progress}%`;
     
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    showResults();
-                }
-    
                 // Update steps
-                if (progress >= 25 && currentStep === 0) {
-                    steps[0].classList.remove('active');
-                    steps[1].classList.add('active');
-                    currentStep = 1;
-                } else if (progress >= 50 && currentStep === 1) {
-                    steps[1].classList.remove('active');
-                    steps[2].classList.add('active');
-                    currentStep = 2;
-                } else if (progress >= 75 && currentStep === 2) {
-                    steps[2].classList.remove('active');
-                    steps[3].classList.add('active');
-                    currentStep = 3;
+                if (progress % (100 / totalSteps) === 0) {
+                    steps[currentStep].classList.remove('active');
+                    currentStep = (currentStep + 1) % totalSteps;
+                    steps[currentStep].classList.add('active');
                 }
             }, 50);
-        }
-    
-        function showResults() {
+
+            // Send AJAX request
+            fetch('{{ route("user.analyze.fundus") }}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data.success) {
+                    throw new Error(data.message || 'Analysis failed');
+                }
+
+                const results = data.data;
+                
+                // Helper function to safely update element content
+                const updateElement = (id, content) => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.textContent = content;
+                    }
+                };
+
+                // Helper function to safely update list content
+                const updateList = (id, items) => {
+                    const list = document.getElementById(id);
+                    if (list) {
+                        list.innerHTML = items.map(item => `<li>${item}</li>`).join('');
+                    }
+                };
+
+                // Helper function to format tips content
+                const formatTipsContent = (content) => {
+                    if (!content) return '';
+                    
+                    // Split content into sections
+                    const sections = content.split('\n\n');
+                    let formattedHtml = '';
+                    
+                    sections.forEach(section => {
+                        if (section.startsWith('**')) {
+                            // This is a header
+                            formattedHtml += `<h5>${section.replace(/\*\*/g, '')}</h5>`;
+                        } else if (section.includes('*')) {
+                            // This is a list
+                            const items = section.split('\n').filter(item => item.trim().startsWith('*'));
+                            formattedHtml += '<ul>';
+                            items.forEach(item => {
+                                formattedHtml += `<li>${item.replace(/^\*\s*/, '').replace(/\*/g, '')}</li>`;
+                            });
+                            formattedHtml += '</ul>';
+                        } else {
+                            // This is regular text
+                            formattedHtml += `<p>${section}</p>`;
+                        }
+                    });
+                    
+                    return formattedHtml;
+                };
+
+                // Update basic information
+                updateElement('severityValue', `${(results.confidence * 100).toFixed(1)}%`);
+                updateElement('detectedCondition', results.predicted_class);
+                updateElement('confidenceLevel', `${(results.confidence * 100).toFixed(1)}%`);
+                updateElement('analysisTime', new Date().toLocaleTimeString());
+                updateElement('analysisDate', new Date().toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }));
+
+                // Update recommendations
+                updateList('recommendationsList', results.recommendations);
+
+                // Update clinical notes
+                updateList('clinicalNotesList', results.clinical_notes);
+
+                // Update conditions list
+                const conditionsList = document.getElementById('conditionsList');
+                if (conditionsList) {
+                    conditionsList.innerHTML = results.conditions.map(condition => `
+                        <li>
+                            ${condition.name}
+                            <span class="confidence-badge">${(condition.confidence * 100).toFixed(1)}%</span>
+                        </li>
+                    `).join('');
+                }
+
+                // Update tips and relief
+                const tipsAndRelief = document.getElementById('tipsAndRelief');
+                if (tipsAndRelief && results.tips_and_relief) {
+                    tipsAndRelief.innerHTML = formatTipsContent(results.tips_and_relief);
+                }
+
+                // Show results section
             analysisSection.style.display = 'none';
             resultsSection.style.display = 'block';
+
+                // Clear progress interval
+                clearInterval(progressInterval);
+                analysisProgress.style.width = '100%';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message || 'An error occurred while analyzing the image. Please try again.');
+                uploadContainer.style.display = 'block';
+                analysisSection.style.display = 'none';
+                resultsSection.style.display = 'none';
+            });
         }
     
         // Download PDF handler
         document.getElementById('downloadPDF').addEventListener('click', () => {
-            // Implement PDF generation and download
-            alert('PDF report will be downloaded');
+            const resultsSection = document.getElementById('resultsSection');
+            
+            // Create a new window for printing
+            const printWindow = window.open('', '_blank');
+            
+            // Get the current date and time
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            const timeStr = now.toLocaleTimeString();
+
+            // Create the PDF content
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Fundus Analysis Report</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            line-height: 1.6;
+                            color: #333;
+                            max-width: 800px;
+                            margin: 0 auto;
+                            padding: 20px;
+                        }
+                        .header {
+                            text-align: center;
+                            margin-bottom: 30px;
+                            border-bottom: 2px solid #604BB0;
+                            padding-bottom: 20px;
+                        }
+                        .header h1 {
+                            color: #604BB0;
+                            margin: 0;
+                        }
+                        .header p {
+                            color: #666;
+                            margin: 10px 0 0;
+                        }
+                        .section {
+                            margin-bottom: 30px;
+                        }
+                        .section h2 {
+                            color: #604BB0;
+                            border-bottom: 1px solid #eee;
+                            padding-bottom: 10px;
+                        }
+                        .detail-grid {
+                            display: grid;
+                            grid-template-columns: repeat(3, 1fr);
+                            gap: 20px;
+                            margin: 20px 0;
+                        }
+                        .detail-item {
+                            background: #f8f9fa;
+                            padding: 15px;
+                            border-radius: 8px;
+                        }
+                        .detail-item h3 {
+                            margin: 0 0 10px;
+                            color: #604BB0;
+                            font-size: 16px;
+                        }
+                        .detail-item p {
+                            margin: 0;
+                            font-weight: bold;
+                        }
+                        .list {
+                            list-style: none;
+                            padding: 0;
+                        }
+                        .list li {
+                            margin-bottom: 10px;
+                            padding-left: 20px;
+                            position: relative;
+                        }
+                        .list li::before {
+                            content: '•';
+                            color: #604BB0;
+                            position: absolute;
+                            left: 0;
+                        }
+                        .disclaimer {
+                            background: #fff3cd;
+                            padding: 15px;
+                            border-radius: 8px;
+                            margin-top: 30px;
+                        }
+                        .disclaimer p {
+                            margin: 0;
+                            color: #856404;
+                        }
+                        @media print {
+                            body {
+                                padding: 0;
+                            }
+                            .header {
+                                margin-bottom: 20px;
+                            }
+                            .section {
+                                page-break-inside: avoid;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>Fundus Analysis Report</h1>
+                        <p>Generated on ${dateStr} at ${timeStr}</p>
+                    </div>
+
+                    <div class="section">
+                        <h2>Analysis Results</h2>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <h3>Detected Condition</h3>
+                                <p>${document.getElementById('detectedCondition').textContent}</p>
+                            </div>
+                            <div class="detail-item">
+                                <h3>Confidence Level</h3>
+                                <p>${document.getElementById('confidenceLevel').textContent}</p>
+                            </div>
+                            <div class="detail-item">
+                                <h3>Analysis Date</h3>
+                                <p>${document.getElementById('analysisDate').textContent}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2>Recommendations</h2>
+                        <ul class="list">
+                            ${Array.from(document.getElementById('recommendationsList').children)
+                                .map(li => `<li>${li.textContent}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h2>Clinical Notes</h2>
+                        <ul class="list">
+                            ${Array.from(document.getElementById('clinicalNotesList').children)
+                                .map(li => `<li>${li.textContent}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h2>Tips & Relief Suggestions</h2>
+                        <div class="tips-content">
+                            ${document.getElementById('tipsAndRelief').innerHTML}
+                        </div>
+                    </div>
+
+                    <div class="disclaimer">
+                        <p><strong>Disclaimer:</strong> This is an AI-generated report. Please consult with a medical professional for accurate diagnosis and treatment.</p>
+                    </div>
+                </body>
+                </html>
+            `);
+
+            // Wait for content to load
+            printWindow.document.close();
+            printWindow.onload = function() {
+                printWindow.print();
+                // Close the window after printing
+                printWindow.onafterprint = function() {
+                    printWindow.close();
+                };
+            };
         });
-    
-        // Share Report handler
-        document.getElementById('shareReport').addEventListener('click', () => {
-            // Implement sharing functionality
-            alert('Share functionality will be implemented');
+
+        // Try Again handler
+        document.getElementById('tryAgain').addEventListener('click', () => {
+            // Reset the form
+            document.getElementById('formFileInput').value = '';
+            
+            // Show upload section and hide results
+            document.getElementById('uploadContainer').style.display = 'block';
+            document.getElementById('resultsSection').style.display = 'none';
+            
+            // Reset all result fields
+            document.getElementById('severityValue').textContent = 'N/A';
+            document.getElementById('detectedCondition').textContent = 'N/A';
+            document.getElementById('confidenceLevel').textContent = 'N/A';
+            document.getElementById('analysisTime').textContent = 'N/A';
+            document.getElementById('analysisDate').textContent = 'N/A';
+            document.getElementById('recommendationsList').innerHTML = '';
+            document.getElementById('clinicalNotesList').innerHTML = '';
+            document.getElementById('conditionsList').innerHTML = '';
+            document.getElementById('tipsAndRelief').innerHTML = '';
         });
     });
     </script>

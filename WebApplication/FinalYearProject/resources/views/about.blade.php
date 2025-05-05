@@ -100,7 +100,7 @@
                             <ul class="inflanar-list-style inflanar-list-style__row list-none mg-top-20">
                                 <li class="color-white">
                                     <i class="fa-solid fa-circle-check"></i>
-                                    <span>AI-powered disease detection with 95% accuracy</span>
+                                    <span>AI-powered disease detection with 80% accuracy</span>
                                 </li>
                                 <li class="color-white">
                                     <i class="fa-solid fa-circle-check"></i>
@@ -300,7 +300,6 @@
  
 </section>
 
-
 <section class="pd-top-120 pd-btm-120">
     <div class="container">
         <div class="row">
@@ -376,6 +375,63 @@
                     </div>
                     <div class="inflanar-hcard__img">
                         <img src="{{ asset('img/report2.png') }}" alt="Results">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="inflanar-section-shape15 inflanar-bg-cover pd-top-90 pd-btm-120">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-md-12">
+                <div class="inflanar-section__head mg-btm-20">
+                    <span class="inflanar-section__badge inflanar-primary-color m-0 color-white">
+                        <i class="fas fa-user-md"></i>
+                        <span>For Healthcare Professionals</span>
+                    </span>
+                    <h2 class="inflanar-section__title inflanar-section__title--medium mg-btm-20 color-white">
+                        Join Our Network of Eye Care Specialists
+                    </h2>
+                    <p class="color-white">
+                        Expand your practice and reach more patients through our innovative platform. 
+                        Register as a doctor and connect with patients seeking expert eye care.
+                    </p>
+                    <ul class="inflanar-list-style inflanar-list-style__row list-none mg-top-20">
+                        <li class="color-white">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Grow your patient base</span>
+                        </li>
+                        <li class="color-white">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Manage appointments efficiently</span>
+                        </li>
+                        <li class="color-white">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Access AI-powered diagnostic tools</span>
+                        </li>
+                        <li class="color-white">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Provide better patient care</span>
+                        </li>
+                    </ul>
+                    <div class="button-group mg-top-40">
+                        <a href="{{ route('doctor.register') }}" class="inflanar-btn inflanar-btn-outline">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Register as Doctor</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <div class="doctor-image-container">
+                    <img src="{{ asset('img/doctor-img-removebg-preview.png') }}" alt="Doctor Registration" class="doctor-image">
+                    <div class="image-overlay">
+                        <div class="overlay-content">
+                            <i class="fas fa-stethoscope"></i>
+                            <span>Join Our Medical Network</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -657,6 +713,46 @@
     
     .inflanar-hcard {
         margin-bottom: 30px;
+    }
+}
+
+/* Doctor Section Styles */
+.doctor-image-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.doctor-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.doctor-image-container:hover .doctor-image {
+    transform: scale(1.05);
+}
+
+.doctor-image-container:hover .image-overlay {
+    opacity: 1;
+}
+
+/* Responsive Adjustments for Doctor Section */
+@media (max-width: 991px) {
+    .doctor-image-container {
+        margin-top: 40px;
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .doctor-image-container {
+        max-width: 300px;
     }
 }
 </style>

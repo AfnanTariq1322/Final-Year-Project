@@ -12,7 +12,7 @@ use App\Models\Category;
 use App\Models\Contact;
 
 use App\Models\Chat\SellerAdminChat;
-use App\Models\Doctor\Doctor;
+use App\Models\Doctor;
 use App\Models\Seller\Seller;
  use App\Models\Admin;
   use App\Models\Product\Product;
@@ -290,11 +290,12 @@ class AdminController extends Controller
                 return redirect()->route('admin.login')->with('fail', 'You must be logged in to access the dashboard');
             }
         
-            $recentUsers = User::orderBy('created_at', 'desc')->distinct()->limit(5)->get();
+            $recentUsers = User::orderBy('created_at', 'desc')->distinct()->limit(10)->get();
              $totalblogsCount = Blog::count();   
             $totalUserCount = User::count();
-           
-              $recentBlogs = Blog::orderBy('created_at', 'desc')->limit(5)->get();
+            $totalDoctorsCount = Doctor::count();
+            $recentDoctors = Doctor::orderBy('created_at', 'desc')->limit(5)->get();
+            $recentBlogs = Blog::orderBy('created_at', 'desc')->limit(5)->get();
         
             return view('admin.dashboard', [
                 'LoggedAdminInfo' => $LoggedAdminInfo,
@@ -304,6 +305,8 @@ class AdminController extends Controller
                 'recentUsers' => $recentUsers,
                  'totalblogsCount' => $totalblogsCount,
                  'recentBlogs' => $recentBlogs,
+                 'totalDoctorsCount' => $totalDoctorsCount,
+                 'recentDoctors' => $recentDoctors,
             ]);
         }
         
@@ -429,6 +432,37 @@ class AdminController extends Controller
                 return redirect()->back()->with('success', 'User deactivated successfully.');
             }
     
+    public function doctors()
+    {
+        $LoggedAdminInfo = Admin::find(session('LoggedAdminInfo'));
+        if (!$LoggedAdminInfo) {
+            return redirect()->route('admin.login')->with('fail', 'You must be logged in to access the dashboard');
+        }
+
+        $doctors = Doctor::paginate(10);
+        return view('admin.doctors', [
+            'LoggedAdminInfo' => $LoggedAdminInfo,
+            'doctors' => $doctors
+        ]);
     }
+
+    public function activateDoctor($id)
+    {
+        $doctor = Doctor::findOrFail($id);
+        $doctor->status = 'active';
+        $doctor->save();
+
+        return redirect()->back()->with('success', 'Doctor activated successfully.');
+    }
+
+    public function deactivateDoctor($id)
+    {
+        $doctor = Doctor::findOrFail($id);
+        $doctor->status = 'inactive';
+        $doctor->save();
+
+        return redirect()->back()->with('success', 'Doctor deactivated successfully.');
+    }
+}
     
  

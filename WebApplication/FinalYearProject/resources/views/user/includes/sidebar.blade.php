@@ -41,7 +41,21 @@
                 <span class="inflanar-psidebar__title">Profile</span>
             </a>
 
-
+            <a class="list-group-item {{ request()->is('user/appointments') ? 'active' : '' }}" href="{{ route('user.appointments') }}">
+                <span class="inflanar-psidebar__icon">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.5 2.5H2.5C1.39543 2.5 0.5 3.39543 0.5 4.5V17.5C0.5 18.6046 1.39543 19.5 2.5 19.5H17.5C18.6046 19.5 19.5 18.6046 19.5 17.5V4.5C19.5 3.39543 18.6046 2.5 17.5 2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M14.5 1.5V3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M5.5 1.5V3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M0.5 7.5H19.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M6.5 11.5H7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12.5 11.5H13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M6.5 15.5H7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12.5 15.5H13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                <span class="inflanar-psidebar__title">Appointments</span>
+            </a>
 
             <a class="list-group-item" data-bs-toggle="modal" data-bs-target="#logout_modal">
                 <span class="inflanar-psidebar__icon">

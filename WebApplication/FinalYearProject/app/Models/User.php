@@ -28,6 +28,7 @@ class User extends Authenticatable  implements JWTSubject
      */
     protected $fillable = [
         'name',
+        'acute_disease_detected',
         'email',
         'password',
       'phone', 'country', 'city', 'address',
@@ -58,5 +59,56 @@ class User extends Authenticatable  implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'acute_disease_detected' => 'array',
+        'medical_history' => 'array',
+        'symptoms' => 'array',
+        'eye_condition' => 'array'
     ];
+
+    /**
+     * Set the acute_disease_detected attribute.
+     *
+     * @param  mixed  $value
+     * @return void
+     */
+    public function setAcuteDiseaseDetectedAttribute($value)
+    {
+        if (is_array($value)) {
+            $this->attributes['acute_disease_detected'] = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        } elseif (is_string($value)) {
+            // If it's already a JSON string, validate it
+            json_decode($value);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $this->attributes['acute_disease_detected'] = $value;
+            } else {
+                throw new \InvalidArgumentException('Invalid JSON string provided for acute_disease_detected');
+            }
+        } else {
+            $this->attributes['acute_disease_detected'] = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        }
+    }
+
+    /**
+     * Get the acute_disease_detected attribute.
+     *
+     * @param  string  $value
+     * @return mixed
+     */
+    public function getAcuteDiseaseDetectedAttribute($value)
+    {
+        if (empty($value)) {
+            return null;
+        }
+        
+        if (is_string($value)) {
+            $decoded = json_decode($value, true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                return $decoded;
+            }
+            \Log::error('JSON decode error in getAcuteDiseaseDetectedAttribute: ' . json_last_error_msg());
+            return null;
+        }
+        
+        return $value;
+    }
 }

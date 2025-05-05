@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Session;
 
 class AuthCheck
 {
@@ -15,6 +16,10 @@ class AuthCheck
      */
     public function handle(Request $request, Closure $next)
     {
+        if (!Session::has('loginId')) {
+            return redirect()->route('doctor.login')->with('fail', 'You must be logged in to access this page');
+        }
+
         return $next($request)->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate')
             ->header('Pragma', 'no-cache')
             ->header('Expires', 'Sat 01 Jan 1990 00:00:00 GMT');

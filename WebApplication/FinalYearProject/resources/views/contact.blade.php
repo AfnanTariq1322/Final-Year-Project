@@ -4,28 +4,44 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta charset="utf-8">
-    <meta name="keywords" content="">
-    <meta name="author" content="">
-    <meta name="robots" content="">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="description" content="Zenix - Crypto Admin Dashboard">
-    <meta property="og:title" content="Zenix - Crypto Admin Dashboard">
-    <meta property="og:description" content="Zenix - Crypto Admin Dashboard">
-    <meta property="og:image" content="https://zenix.dexignzone.com/xhtml/social-image.png">
-    <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="keywords" content="Site keywords here">
+    <meta name="description" content="#">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <head>
-        <title>Admin Dashboard</title>
-        <!-- Favicon icon -->
-        <link rel="icon" type="image/png" href="{{ asset('storage/downloads/appicon.png') }}">
-    </head>
+    <title>Fundus Disease Analysis - Dashboard</title>
 
-    <link rel="stylesheet" href="../AdminTemplate/vendor/chartist/css/chartist.min.css">
-    <link href="../AdminTemplate/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
-    <link href="../AdminTemplate/vendor/owl-carousel/owl.carousel.css" rel="stylesheet">
-    <link href="../AdminTemplate/css/style.css" rel="stylesheet">
+    <link rel="icon" href="../img/newicon.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <!-- FONTAWESOME -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="../css/jquery-ui.min.css">
+
+    <link rel="stylesheet" href="../css/animate.min.css">
+
+    <link rel="stylesheet" href="../css/aos.min.css">
+
+    <link rel="stylesheet" href="../css/font-awesome-all.min.css">
+
+    <link rel="stylesheet" href="../css/swiper-slider.min.css">
+
+    <link rel="stylesheet" href="../css/select2-min.css">
+
+    <link rel="stylesheet" href="../css/datatables.min.css">
+
+    <link rel="stylesheet" href="../css/video-popup.min.css">
+
+    <link rel="stylesheet" href="{{ asset('css/theme-default.css') }}">
+    <link rel="stylesheet" href="../style.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
 </head>
 
@@ -84,7 +100,7 @@
                 <div class="col-lg-12 col-12 mg-top-30">
                     <div class="inflanar-comments-form inflanar-comments-form--reviews">
                         <h3 class="inflanar-contact-form__title m-0">Feel Free to Get in Touch</h3>
-                        <form action="{{ route('contact.store') }}" method="POST">
+                        <form id="contactForm" action="{{ route('contact.store') }}" method="POST">
                             @csrf
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-12">
@@ -130,104 +146,6 @@
         </div>
     </section>
 
-    <!-- Newsletter Modal -->
-    <div class="modal fade" id="newsletterModal" tabindex="-1" aria-labelledby="newsletterModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="newsletterModalLabel">
-                    <i class="fas fa-envelope fa-sm"></i> Subscribe to Our Newsletter
-                </h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Stay updated with our latest news, articles, and research. Enter your email below to subscribe.</p>
-                <form id="newsletter-form" action="/subscribe-newsletter" method="POST">
-                    @csrf
-                    <div class="form-group">
-                        <label>Email Address*</label>
-                        <input class="form-control" type="email" name="newsletter_email" placeholder="Enter your email" required>
-                    </div>
-                    <div class="mt-3 text-center">
-                        <button type="submit" class="btn  w-100" style="background-color:#604BB0 !important; color:white;"><span>Subscribe</span></button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-    <!-- JavaScript to Auto-Open Modal -->
-    <script>
-    setTimeout(function() {
-        var myModal = new bootstrap.Modal(document.getElementById('newsletterModal'));
-        myModal.show();
-    }, 4000); // Opens after 3 seconds
-    </script>
- <script>
-document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("newsletter-form").addEventListener("submit", function (e) {
-        e.preventDefault();
-
-        let csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
-        let csrfToken = csrfTokenMeta ? csrfTokenMeta.content : '';
-        let email = document.querySelector("input[name='newsletter_email']").value;
-        let modalBody = document.querySelector(".modal-body");
-        let modal = new bootstrap.Modal(document.getElementById('newsletterModal')); // Bootstrap Modal instance
-
-        fetch("/subscribe-newsletter", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": csrfToken
-            },
-            body: JSON.stringify({ newsletter_email: email })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                modalBody.innerHTML = `
-                    <div class="alert alert-success text-center">
-                        <i class="fas fa-check-circle"></i> ${data.message}
-                    </div>
-                    <button class="btn btn-primary w-100 mt-3" data-bs-dismiss="modal">Close</button>
-                `;
-            } else {
-                modalBody.innerHTML = `
-                    <div class="alert alert-warning text-center">
-                        <i class="fas fa-exclamation-circle"></i> ${data.message}
-                    </div>
-                    <button class="btn btn-danger w-100 mt-3" data-bs-dismiss="modal">Try Again</button>
-                `;
-            }
-
-            // Close modal after 4 seconds
-            setTimeout(() => {
-                modal.hide();
-            }, 4000);
-        })
-        .catch(error => {
-            modalBody.innerHTML = `
-                <div class="alert alert-danger text-center">
-                    <i class="fas fa-times-circle"></i> Server Error! Please try again later.
-                </div>
-                <button class="btn btn-dark w-100 mt-3" data-bs-dismiss="modal">Close</button>
-            `;
-
-            // Close modal after 4 seconds
-            setTimeout(() => {
-                modal.hide();
-            }, 4000);
-        });
-    });
-});
-</script>
-
- 
-
     @include('includes.section')
 
     @include('includes.footer')
@@ -262,6 +180,57 @@ document.addEventListener("DOMContentLoaded", function () {
 
     <script src="../js/active.js"></script>
 
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Your message has been sent successfully!',
+                        icon: 'success',
+                        confirmButtonColor: '#604BB0',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.reset();
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Something went wrong. Please try again.',
+                        icon: 'error',
+                        confirmButtonColor: '#604BB0',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Something went wrong. Please try again.',
+                    icon: 'error',
+                    confirmButtonColor: '#604BB0',
+                    confirmButtonText: 'OK'
+                });
+            });
+        });
+    </script>
 
 </body>
 

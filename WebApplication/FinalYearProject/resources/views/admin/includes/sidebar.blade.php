@@ -20,49 +20,44 @@
 	                    <i class="flaticon-144-layout"></i>
 	                    <span class="nav-text">Dashboard</span>
 	                </a>
-
-
 	            </li>
 				<li>
-    <a href="/admin/profile" aria-expanded="false">
-        <i class="flaticon-381-user"></i> <!-- Flaticon for Profile -->
-        <span class="nav-text">Profile</span>
-    </a>
-</li>
-<li>
-    <a href="/admin/blog" aria-expanded="false">
-        <i class="flaticon-381-list"></i> <!-- Flaticon for Blogs -->
-        <span class="nav-text">Blogs</span>
-    </a>
-</li>
- 
-<li>
-    <a href="/admin/user" aria-expanded="false">
-        <i class="flaticon-381-user-1"></i> <!-- Flaticon for Users -->
-        <span class="nav-text">Users</span>
-    </a>
-</li>
- 
-
- 
-<li>
-    <a href="/admin/category" aria-expanded="false">
-        <i class="flaticon-381-folder"></i> <!-- Flaticon for Category -->
-        <span class="nav-text">Category</span>
-    </a>
-</li>
-
- 
-
-<li>
-    <a href="/admin/contact" aria-expanded="false">
-        <i class="fa fa-address-book"></i> <!-- FontAwesome icon for Contacts -->
-        <span class="nav-text">Messeges/Contacts</span>
-    </a>
-</li>
-
+                    <a href="/admin/profile" aria-expanded="false">
+                        <i class="flaticon-381-user"></i>
+                        <span class="nav-text">Profile</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/blog" aria-expanded="false">
+                        <i class="flaticon-381-list"></i>
+                        <span class="nav-text">Blogs</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/user" aria-expanded="false">
+                        <i class="flaticon-381-user-1"></i>
+                        <span class="nav-text">Users</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/doctors" aria-expanded="false">
+                        <i class="fas fa-user-md"></i>
+                        <span class="nav-text">Doctors</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/category" aria-expanded="false">
+                        <i class="flaticon-381-folder"></i>
+                        <span class="nav-text">Category</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/contact" aria-expanded="false">
+                        <i class="fa fa-address-book"></i>
+                        <span class="nav-text">Messeges/Contacts</span>
+                    </a>
+                </li>
 	        </ul>
-	       
 	    </div>
 	</div>
 	<!--**********************************

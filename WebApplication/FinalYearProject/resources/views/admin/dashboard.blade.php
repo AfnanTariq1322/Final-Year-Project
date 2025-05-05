@@ -132,6 +132,22 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-xl-3 col-sm-6 m-t35">
+                        <div class="widget-stat card bg-primary">
+                            <div class="card-body p-4">
+                                <div class="media">
+                                    <span class="mr-3">
+                                        <i class="fas fa-user-md"></i> <!-- FontAwesome doctor icon -->
+                                    </span>
+                                    <div class="media-body text-white text-right">
+                                        <p class="mb-1">Total Doctors</p>
+                                        <h3 class="text-white">{{ $totalDoctorsCount }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -149,30 +165,65 @@
                             @foreach($recentUsers as $user)
                             <div class="items">
                                 <div class="text-center">
-                                    @if($user['image'])
-                                    <img src="{{ asset('storage/' . $user['image']) }}" alt="Profile Picture"
-                                        class="mb-3 rounded" style="width: 100px; height: 100px;">
+                                    @if($user->image)
+                                    <img src="{{ asset('storage/' . $user->image) }}" alt="Profile Picture"
+                                        class="mb-3 rounded" style="width: 100px; height: 100px; object-fit: cover;">
                                     @else
-                                    <img src="{{ asset('path_to_default_image.jpg') }}" alt="Default Picture"
-                                        style="width: 100px; height: 100px;">
+                                    <img src="{{ asset('img/user-avatar.png') }}" alt="Default Picture"
+                                        class="mb-3 rounded" style="width: 100px; height: 100px; object-fit: cover;">
                                     @endif
-                                    <h5 class="mb-0"><a class="text-black"
-                                            href="javascript:void(0);">{{ $user->name }}</a>
-                                    </h5>
-                                    <span class="badge-sm badge-secondary rounded">{{ $user->bloodgroup }}</span>
-                                    @if($user->bloodpressure == 'High')
-                                    <span class="badge-sm badge-danger rounded">{{ $user->bloodpressure }}</span>
-                                    <!-- Red for high -->
-                                    @elseif($user->bloodpressure == 'Normal')
-                                    <span class="badge-sm badge-warning rounded">{{ $user->bloodpressure }}</span>
-                                    <!-- Yellow for normal -->
-                                    @elseif($user->bloodpressure == 'Low')
-                                    <span class="badge-sm badge-success rounded">{{ $user->bloodpressure }}</span>
-                                    <!-- Green for low -->
+                                    <h5 class="mb-0"><a class="text-black" href="javascript:void(0);">{{ $user->name }}</a></h5>
+                                    <div class="mt-2">
+                                        @if($user->visual_acuity)
+                                        <span class="badge-sm badge-info rounded">
+                                            <i class="fas fa-eye"></i> {{ $user->visual_acuity }}
+                                        </span>
+                                        @endif
+                                        @if($user->eye_condition)
+                                        <span class="badge-sm badge-warning rounded">
+                                            <i class="fas fa-glasses"></i> {{ $user->eye_condition }}
+                                        </span>
+                                        @endif
+                                    </div>
+                                 
+                                  
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex mb-3 mt-3 justify-content-between align-items-center">
+                            <h4 class="text-black fs-20 mb-0">Recent Doctors</h4>
+                            <a href="/admin/doctors" class="btn-link">View more</a>
+                        </div>
+                        <div class="testimonial-one px-4 owl-right-nav owl-carousel owl-loaded owl-drag">
+                            @foreach($recentDoctors as $doctor)
+                            <div class="items">
+                                <div class="text-center">
+                                    @if($doctor->profile_image)
+                                    <img src="{{ asset('storage/' . $doctor->profile_image) }}" alt="Doctor Profile"
+                                        class="mb-3 rounded" style="width: 100px; height: 100px; object-fit: cover;">
                                     @else
-                                    <span class="badge-sm badge-secondary rounded">Unknown</span>
-                                    <!-- Fallback for unknown values -->
+                                    <img src="{{ asset('img/doctor-avatar.png') }}" alt="Default Doctor Picture"
+                                        class="mb-3 rounded" style="width: 100px; height: 100px; object-fit: cover;">
                                     @endif
+                                    <h5 class="mb-0"><a class="text-black" href="javascript:void(0);">{{ $doctor->name }}</a></h5>
+                                    <span class="badge-sm badge-primary rounded">{{ $doctor->specialization }}</span>
+                                    @if($doctor->sub_specialization)
+                                    <span class="badge-sm badge-info rounded">{{ $doctor->sub_specialization }}</span>
+                                    @endif
+                                    <div class="mt-2">
+                                        <small class="text-muted">
+                                            <i class="fas fa-star text-warning"></i>
+                                            {{ $doctor->experience_years }} Years Experience
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
                             @endforeach

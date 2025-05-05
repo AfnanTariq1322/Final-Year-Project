@@ -118,7 +118,8 @@
                                 class="user-image"
                                 style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ccc; margin-right: 10px;">
                             @else
-                            <img src="{{ asset('path/to/default/image.png') }}" alt="Default Image" class="user-image"
+                            <img src="{{ asset('path/to/default/image.png') }}" alt="     "
+                                class="user-image"
                                 style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ccc; margin-right: 10px;">
                             @endif
                             Welcome, {{ session('LoggedUserName') }}
@@ -157,12 +158,35 @@
                                     <div class="navbar">
                                         <div class="nav-item">
                                             <ul class="nav-menu menu navigation list-none">
-                                                <li class="active"><a href="/home">Home</a>
+                                                <li class="{{ request()->routeIs('home') ? 'active' : '' }}">
+                                                    <a href="{{ route('home') }}" class="menu-blogs">Home</a>
                                                 </li>
-                                                <li><a href="/about">About</a></li>
-                                                <li><a href="/blogs">Our Blogs</a></li>
-                                                <li><a href="">Diseases</a></li>
-                                                <li><a href="">Contact Us</a></li>
+                                                <li
+                                                    class="{{ request()->routeIs('about') || request()->routeIs('about') ? 'active' : '' }}">
+                                                    <a href="{{ route('about') }}" class="menu-blogs">About</a>
+                                                </li>
+    
+                                                <li
+                                                    class="{{ request()->routeIs('blogs') || request()->routeIs('blogdetail') ? 'active' : '' }}">
+                                                    <a href="{{ route('blogs') }}" class="menu-blogs">Our Blogs</a>
+                                                </li>
+    
+                                                <li
+                                                    class="{{ request()->routeIs('diagnosis') || request()->routeIs('diagnosis') ? 'active' : '' }}">
+                                                    <a href="{{ route('diagnosis') }}" class="menu-blogs">Diagnosis</a>
+                                                </li>
+    
+    
+                                                <!-- 🆕 Doctors Menu -->
+                                                <li class="{{ request()->routeIs('doctors') ? 'active' : '' }}">
+                                                    <a href="{{ route('doctors') }}" class="menu-blogs">Doctors</a>
+                                                </li>
+    
+    
+                                                <li
+                                                    class="{{ request()->routeIs('contact') || request()->routeIs('contact') ? 'active' : '' }}">
+                                                    <a href="{{ route('contact') }}" class="menu-blogs">Contact Us</a>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -383,11 +407,19 @@
                     <h5><i class="fas fa-clipboard-list"></i> Symptoms</h5>
                     <div class="symptoms-list">
                         @php
-                            $symptomsArray = explode(',', $LoggedUserInfo->symptoms);
+                            if (is_string($LoggedUserInfo->symptoms)) {
+                                $symptomsArray = explode(',', $LoggedUserInfo->symptoms);
+                            } elseif (is_array($LoggedUserInfo->symptoms)) {
+                                $symptomsArray = $LoggedUserInfo->symptoms;
+                            } else {
+                                $symptomsArray = [];
+                            }
                         @endphp
-                        @foreach ($symptomsArray as $symptom)
+                        @forelse ($symptomsArray as $symptom)
                             <span class="symptom-tag">{{ trim($symptom) }}</span>
-                        @endforeach
+                        @empty
+                            <span class="symptom-tag">No symptoms recorded</span>
+                        @endforelse
                     </div>
                 </div>
 
@@ -490,7 +522,13 @@
                             <label>Symptoms</label>
                             <select class="form-control select2" name="symptoms[]" multiple="multiple">
                                 @php
-                                    $selectedSymptoms = explode(',', $LoggedUserInfo->symptoms);
+                                    if (is_string($LoggedUserInfo->symptoms)) {
+                                        $selectedSymptoms = explode(',', $LoggedUserInfo->symptoms);
+                                    } elseif (is_array($LoggedUserInfo->symptoms)) {
+                                        $selectedSymptoms = $LoggedUserInfo->symptoms;
+                                    } else {
+                                        $selectedSymptoms = [];
+                                    }
                                 @endphp
                                 <option value="Blurred Vision" {{ in_array('Blurred Vision', $selectedSymptoms) ? 'selected' : '' }}>Blurred Vision</option>
                                 <option value="Eye Pain" {{ in_array('Eye Pain', $selectedSymptoms) ? 'selected' : '' }}>Eye Pain</option>
