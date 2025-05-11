@@ -39,3 +39,6 @@ Route::get('/dashboard', [UserController::class, 'dashboard']);
 Route::get('/blogs-categories', [BlogController::class, 'getBlogsAndCategories']);
 Route::post('/blog/{blog_id}/comment', [BlogController::class, 'storeComment']);
 Route::get('/blog/{id}', [BlogController::class, 'getBlogDetail']);
+
+Route::post('/forgot-password', [UserController::class, 'forgotPassword']);
+Route::post('/reset-password', [UserController::class, 'resetPassword']);
