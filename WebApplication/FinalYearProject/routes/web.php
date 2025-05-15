@@ -75,6 +75,7 @@ Route::get('/doctor_appointments', [DoctorController::class, 'appointments'])->n
 Route::get('/doctor_completedappointments', [DoctorController::class, 'completedappointments'])->name('doctor.completedappointments');
 Route::get('/doctor_fundus-analysis', [DoctorController::class, 'fundusAnalysis'])->name('doctor.fundus.analysis');
 
+ Route::post('/add', [DoctorController::class, 'save'])->name('add');
 
 Route::middleware(['web', 'AuthCheck'])->group(function () {
      Route::post('/doctor/profile/update', [DoctorController::class, 'updateProfile'])->name('doctor.profile.update');
@@ -129,8 +130,24 @@ Route::get('/test-route', [TestController::class, 'test'])->name('test.route');
 Route::post('/appointments/{id}/update-status', [DoctorController::class, 'updateAppointmentStatus'])->name('appointment.update-status');
 
 Route::post('/user/analyze-fundus', [UserController::class, 'analyzeFundus'])->name('user.analyze.fundus');
-
 // Doctor routes
 Route::middleware(['web', 'AuthCheck'])->group(function () {
     Route::get('/doctor/download-user-report/{id}', [DoctorController::class, 'downloadUserReport'])->name('doctor.download.user.report');
 });
+
+// User Routes
+Route::prefix('user')->group(function () {
+    Route::get('/login', [UsersController::class, 'login'])->name('user.login');
+    Route::get('/register', [UsersController::class, 'register'])->name('user.register');
+    Route::post('/save', [UsersController::class, 'save'])->name('user.save');
+    Route::post('/check', [UsersController::class, 'check'])->name('user.check');
+    Route::post('/verify-otp', [UsersController::class, 'verifyOtp'])->name('user.verify.otp');
+    Route::post('/resend-otp', [UsersController::class, 'resendOtp'])->name('user.resend.otp');
+    Route::get('/profile', [UsersController::class, 'profile'])->name('user.profile');
+    Route::get('/dashboard', [UsersController::class, 'dashboard'])->name('user.dashboard');
+    Route::get('/appointments', [UsersController::class, 'appointments'])->name('user.appointments');
+    Route::get('/download-appointment/{id}', [UsersController::class, 'downloadAppointmentPDF'])->name('user.download.appointment');
+    Route::post('/profile/update', [UsersController::class, 'updateProfile'])->name('user.updateProfile');
+    Route::post('/logout', [UsersController::class, 'logout'])->name('user.logout');
+});
+

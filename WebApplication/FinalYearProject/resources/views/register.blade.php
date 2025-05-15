@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="../css/font-awesome-all.min.css">
     <link rel="stylesheet" href="{{ asset('css/theme-default.css') }}">
     <link rel="stylesheet" href="../style.css">
+    <!-- Add SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
 </head>
 
 <body class="body-color">
@@ -81,7 +83,7 @@
                             @endif
 
                             <div class="inflanar-signin__inner">
-                                <form id="registrationForm" action="{{ route('doctor.save') }}" method="POST">
+                                <form id="registrationForm" action="{{ route('add') }}" method="POST">
                                     @csrf
                                     <div class="row">
                                         <div class="col-12">
@@ -171,53 +173,52 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Add SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
     <script>
-        document.getElementById('registrationForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            let formData = new FormData(this);
-            let errorContainer = document.getElementById("errorContainer");
-            let successMessage = document.getElementById("successMessage");
-
-            errorContainer.innerHTML = "";
-            errorContainer.classList.add("d-none");
-            successMessage.innerText = "";
-            successMessage.classList.add("d-none");
-
-            fetch(this.action, {
-                method: "POST",
-                body: formData,
-                headers: { 
-                    "Accept": "application/json",
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            })
-            .then(response => response.json().then(data => ({ status: response.status, body: data })))
-            .then(({ status, body }) => {
-                if (status === 422) {
-                    errorContainer.classList.remove("d-none");
-                    errorContainer.innerHTML = `
-                        <div class="alert alert-danger">
-                            <ul>${Object.values(body.errors).flat().map(error => `<li>${error}</li>`).join("")}</ul>
-                        </div>
-                    `;
-                } else if (body.success) {
-                    successMessage.classList.remove("d-none");
-                    successMessage.innerText = "OTP sent successfully. Please check your email.";
-
-                    document.getElementById("otp_email").value = formData.get("email");
-
-                    let otpModal = new bootstrap.Modal(document.getElementById("otpModal"));
-                    otpModal.show();
-                } else {
-                    errorContainer.classList.remove("d-none");
-                    errorContainer.innerHTML = `<div class="alert alert-danger">${body.error || "Something went wrong."}</div>`;
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                errorContainer.classList.remove("d-none");
-                errorContainer.innerHTML = `<div class="alert alert-danger">An error occurred. Please try again.</div>`;
+        $(document).ready(function() {
+            $('#registrationForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form data
+                var formData = $(this).serialize();
+                
+                // Send AJAX request
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Show success message
+                            Swal.fire({
+                                title: 'Success!',
+                                text: response.message,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // Show OTP verification modal
+                                    $('#otpModal').modal('show');
+                                    // Set the email in the hidden input
+                                    $('#otp_email').val($('input[name="email"]').val());
+                                }
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        // Show error message
+                        Swal.fire({
+                            title: 'Error!',
+                            text: xhr.responseJSON?.error || 'Something went wrong. Please try again.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
             });
         });
 

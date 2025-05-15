@@ -127,6 +127,4 @@
 
 })(jQuery);
 
-new ModalVideo('.js-video-btn');
-
 

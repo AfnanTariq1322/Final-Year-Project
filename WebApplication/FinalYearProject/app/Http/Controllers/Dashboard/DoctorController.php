@@ -27,36 +27,49 @@ class DoctorController extends Controller
 
     public function save(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:doctors',
-            'password' => 'required|min:5|max:12',
-            'phone' => 'required|unique:doctors',
-            'specialization' => 'required',
-            'experience' => 'required',
-            'qualification' => 'required',
-            'address' => 'required',
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:doctors',
+                'password' => 'required|string|min:5|max:12',
+                'confirm_password' => 'required|same:password'
+            ]);
 
-        $doctor = new Doctor;
-        $doctor->name = $request->name;
-        $doctor->email = $request->email;
-        $doctor->password = Hash::make($request->password);
-        $doctor->phone = $request->phone;
-        $doctor->specialization = $request->specialization;
-        $doctor->experience = $request->experience;
-        $doctor->qualification = $request->qualification;
-        $doctor->address = $request->address;
-        $doctor->otp = rand(100000, 999999);
-        $doctor->save();
+            // Create doctor record
+            $doctor = new Doctor;
+            $doctor->name = $request->name;
+            $doctor->email = $request->email;
+            $doctor->password = Hash::make($request->password);
+            $doctor->otp_code = rand(100000, 999999);
+            $doctor->otp_expires_at = now()->addMinutes(10);
+            $doctor->is_verified = 0;
+            $doctor->status = 'inactive';
+            $doctor->save();
 
-        // Send OTP email
-        Mail::send('emails.otp', ['otp' => $doctor->otp], function($message) use ($doctor) {
-            $message->to($doctor->email);
-            $message->subject('Verify Your Email');
-        });
+            // Send verification email
+            Mail::send('emails.otp', ['otp' => $doctor->otp_code, 'name' => $doctor->name], function($message) use ($doctor) {
+                $message->to($doctor->email);
+                $message->subject('Verify Your Email - Fundus Disease Analysis');
+            });
 
-        return redirect()->route('doctor.verify')->with('success', 'Registration successful! Please verify your email.');
+            return response()->json([
+                'success' => true,
+                'message' => 'Registration successful! Please verify your email.'
+            ]);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            \Log::error('Doctor registration error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'error' => 'Something went wrong. Please try again.'
+            ], 500);
+        }
     }
 
     public function check(Request $request)
@@ -170,38 +183,87 @@ class DoctorController extends Controller
 
     public function verifyOtp(Request $request)
     {
-        $request->validate([
-            'otp' => 'required|numeric'
-        ]);
+        try {
+            $request->validate([
+                'email' => 'required|email',
+                'otp_code' => 'required|numeric'
+            ]);
 
-        $doctor = Doctor::where('otp', $request->otp)->first();
-        
-        if ($doctor) {
+            $doctor = Doctor::where('email', $request->email)
+                          ->where('otp_code', $request->otp_code)
+                          ->first();
+            
+            if (!$doctor) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Invalid OTP or email.'
+                ], 422);
+            }
+
+            if ($doctor->otp_expires_at && now()->isAfter($doctor->otp_expires_at)) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'OTP has expired. Please request a new one.'
+                ], 422);
+            }
+
             $doctor->is_verified = 1;
-            $doctor->otp = null;
+            $doctor->otp_code = null;
+            $doctor->otp_expires_at = null;
             $doctor->save();
-            return redirect()->route('doctor.login')->with('success', 'Email verified successfully!');
-        } else {
-            return back()->with('fail', 'Invalid OTP');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Email verified successfully!'
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('OTP Verification Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to verify OTP. Please try again.'
+            ], 500);
         }
     }
 
     public function resendOtp(Request $request)
     {
-        $doctor = Doctor::where('email', $request->email)->first();
-        
-        if ($doctor) {
-            $doctor->otp = rand(100000, 999999);
+        try {
+            $request->validate([
+                'email' => 'required|email'
+            ]);
+
+            $doctor = Doctor::where('email', $request->email)->first();
+            
+            if (!$doctor) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Email not found.'
+                ], 404);
+            }
+
+            // Generate new OTP
+            $doctor->otp_code = rand(100000, 999999);
+            $doctor->otp_expires_at = now()->addMinutes(10);
             $doctor->save();
 
-            Mail::send('emails.otp', ['otp' => $doctor->otp], function($message) use ($doctor) {
+            // Send email with new OTP
+            Mail::send('emails.otp', ['otp' => $doctor->otp_code, 'name' => $doctor->name], function($message) use ($doctor) {
                 $message->to($doctor->email);
-                $message->subject('Verify Your Email');
+                $message->subject('New OTP for Email Verification - Fundus Disease Analysis');
             });
 
-            return back()->with('success', 'OTP has been resent to your email.');
-        } else {
-            return back()->with('fail', 'Email not found.');
+            return response()->json([
+                'success' => true,
+                'message' => 'A new OTP has been sent to your email.'
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('OTP Resend Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to resend OTP. Please try again.'
+            ], 500);
         }
     }
     public function updateProfile(Request $request)

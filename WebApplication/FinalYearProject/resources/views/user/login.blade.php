@@ -147,7 +147,7 @@
 
                                             <!-- Register Link -->
                                             <div class="inflanar-signin__bottom">
-                                                <p class="inflanar-signin__text mg-top-20">Don’t have an account?
+                                                <p class="inflanar-signin__text mg-top-20">Don't have an account?
                                                     <a href="/user/register">Register here</a>
                                                 </p>
                                             </div>
@@ -294,34 +294,9 @@ document.querySelector("form").addEventListener("submit", function (event) {
         alert("An error occurred. Please try again.");
     });
 });
-function resendOtp() {
-    let email = document.getElementById("otp_email").value;
-
-    fetch("/resend-otp", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({ email })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            document.getElementById("otpMessage").classList.remove("text-danger");
-            document.getElementById("otpMessage").classList.add("text-success");
-            document.getElementById("otpMessage").innerText = "A new OTP has been sent to your email.";
-        } else {
-            document.getElementById("otpMessage").classList.add("text-danger");
-            document.getElementById("otpMessage").innerText = data.error || "Failed to resend OTP.";
-        }
-    })
-    .catch(error => console.error("Error:", error));
-}
 function verifyOtp() {
     let email = document.getElementById("otp_email").value;
-    let otp_code = document.getElementById("otp_input").value; // ✅ Correct ID
+    let otp_code = document.getElementById("otp_input").value;
     let otpMessage = document.getElementById("otpMessage");
 
     if (!otp_code) {
@@ -330,7 +305,7 @@ function verifyOtp() {
         return;
     }
 
-    fetch("/verify-otp", {
+    fetch("/user/verify-otp", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -341,27 +316,66 @@ function verifyOtp() {
     })
     .then(response => response.json().then(data => ({ status: response.status, body: data })))
     .then(({ status, body }) => {
-        if (status === 400 || !body.success) {
+        if (status === 422 || !body.success) {
             otpMessage.classList.remove("text-success");
             otpMessage.classList.add("text-danger");
             otpMessage.innerText = body.error || "Invalid OTP. Please try again.";
         } else {
             otpMessage.classList.remove("text-danger");
             otpMessage.classList.add("text-success");
-            otpMessage.innerText = "OTP verified successfully!";
+            otpMessage.innerText = "OTP verified successfully! Redirecting to login...";
 
             setTimeout(() => {
                 let otpModal = bootstrap.Modal.getInstance(document.getElementById("otpModal"));
                 otpModal.hide();
+                window.location.reload();
             }, 2000);
         }
     })
     .catch(error => {
         console.error("Error:", error);
+        otpMessage.classList.add("text-danger");
         otpMessage.innerText = "An error occurred. Please try again.";
     });
 }
 
+function resendOtp() {
+    let email = document.getElementById("otp_email").value;
+    let otpMessage = document.getElementById("otpMessage");
+
+    if (!email) {
+        otpMessage.classList.add("text-danger");
+        otpMessage.innerText = "Email not found. Please try logging in again.";
+        return;
+    }
+
+    fetch("/user/resend-otp", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ email })
+    })
+    .then(response => response.json().then(data => ({ status: response.status, body: data })))
+    .then(({ status, body }) => {
+        if (status === 422 || !body.success) {
+            otpMessage.classList.remove("text-success");
+            otpMessage.classList.add("text-danger");
+            otpMessage.innerText = body.error || "Failed to resend OTP.";
+        } else {
+            otpMessage.classList.remove("text-danger");
+            otpMessage.classList.add("text-success");
+            otpMessage.innerText = "A new OTP has been sent to your email.";
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        otpMessage.classList.add("text-danger");
+        otpMessage.innerText = "An error occurred. Please try again.";
+    });
+}
 
 </script>
     <script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>

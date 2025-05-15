@@ -295,7 +295,7 @@ class AdminController extends Controller
             $totalUserCount = User::count();
             $totalDoctorsCount = Doctor::count();
             $recentDoctors = Doctor::orderBy('created_at', 'desc')->limit(5)->get();
-            $recentBlogs = Blog::orderBy('created_at', 'desc')->limit(5)->get();
+              $recentBlogs = Blog::orderBy('created_at', 'desc')->limit(5)->get();
         
             return view('admin.dashboard', [
                 'LoggedAdminInfo' => $LoggedAdminInfo,
@@ -463,6 +463,6 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Doctor deactivated successfully.');
     }
-}
+    }
     
  

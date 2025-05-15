@@ -4,17 +4,17 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use App\Models\Category;
+ use App\Models\Category;
 use App\Models\Blog;
-use Illuminate\Support\Facades\Mail;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
+ use Illuminate\Support\Facades\Mail;
+ use Carbon\Carbon;
+  use Illuminate\Support\Facades\Password;
+  use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
